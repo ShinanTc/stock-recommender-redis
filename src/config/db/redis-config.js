@@ -3,9 +3,10 @@ import { createClient } from 'redis';
 
 dotenv.config();
 
-function connectRedis(req, res) {
+function connectRedis(req) {
 
     try {
+
         const client = createClient();
 
         // on error event
