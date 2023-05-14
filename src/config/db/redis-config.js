@@ -3,10 +3,33 @@ import { createClient } from 'redis';
 
 dotenv.config();
 
-const client = createClient();
+function connectRedis(req, res) {
 
-client.on('error', err => console.log('Redis Client Error', err));
+    try {
+        const client = createClient();
 
-await client.connect();
+        // on error event
+        client.on('error', (err) => {
+            console.error('Redis Client Error', err);
+            throw err;
+        });
 
-console.log("Redis connected succefully!");
+        client.connect((err) => {
+            if (err) {
+                console.error('Failed to connect to Redis', err);
+                throw err;
+            } else {
+                console.log('Redis connection succesfull!!!');
+                req.redisClient = client;
+                throw err;
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+
+    console.log("Redis Connection Successfull");
+
+};
+
+export default connectRedis;
