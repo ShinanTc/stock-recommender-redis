@@ -1,9 +1,9 @@
 import express from 'express';
 import { startServer } from './src/config/server/server-config.js';
 import middlewares from './src/middlewares/utils/middlewares.js';
-import connectRedis from './src/config/db/redis-config.js';
 import routeIndex from './src/routes/routeIndex.js';
 import dotenv from 'dotenv';
+import { connectRedis } from './src/config/db/redis-config.js';
 
 const app = express();
 
@@ -13,7 +13,7 @@ dotenv.config();
 // calling all the essential middlewares
 app.use(middlewares);
 
-// creating redis client and connecting
+// connect to redis
 connectRedis();
 
 // entry to all routes
