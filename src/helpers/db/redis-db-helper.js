@@ -10,10 +10,10 @@ export async function createStockData() {
 }
 
 // get stock data
-// async function getStockData(client) {
-//     client.get('stockname', 'HDFCBANK');
-//     let stockName = await client.get('stockname');
-// }
+async function getStockData(client) {
+    let stockName = await client.get('stockname');
+    // https://www.indiainfoline.com/stock-ideas
+}
 
 // delete stock data
 // async function deleteStockData(client) {

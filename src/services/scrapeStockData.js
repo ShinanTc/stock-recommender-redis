@@ -1,17 +1,30 @@
 import puppeteer from 'puppeteer';
 
 // go to the website
-async function scrapeStockData() {
+export async function scrapeStockData() {
 
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
+    try {
+        const browser = await puppeteer.launch({ headless: false });
+        const page = await browser.newPage();
 
-    // indiainfoline.com - for stock recommendation data
+        // indiainfoline.com - for stock recommendation data
 
-    await page.goto('https://www.google.com');
-    console.log(await page.title());
-    await browser.close();
+        await page.goto('https://www.indiainfoline.com/stock-ideas');
 
+        setTimeout(async () => {
+            console.log("Waiting for 12 seconds");
+
+            // close the popup button
+            const popupCloseBtnXpath = '/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img';
+            const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
+            popupCloseBtn.click();
+
+        }, 12000);
+
+        // await browser.close();
+    } catch (error) {
+        throw error;
+    }
 }
 
-// scrapeStockData();
+scrapeStockData();
