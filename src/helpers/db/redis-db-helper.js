@@ -1,11 +1,12 @@
+import { getClient } from "../../config/db/redis-config.js";
+
 // create stock data
-export async function createStockData(client) {
+export async function createStockData() {
 
-    // console.log('client');
-    // console.log(client);
+    let client = getClient();
 
-    // client.set('stockname', 'HDFCBANK');
-    // let stockName = await client.get('stockname');
+    client.set('stockname', 'HDFCBANK');
+    let stockName = await client.get('stockname');
 }
 
 // get stock data

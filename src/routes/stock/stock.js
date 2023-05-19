@@ -1,5 +1,5 @@
 import express from 'express';
-// import { createStockData } from '../../helpers/db/redis-db-helper.js';
+import { createStockData } from '../../helpers/db/redis-db-helper.js';
 
 const router = express.Router();
 
@@ -9,10 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log("Inside / route");
-
-    // createStockData(req.redisClient);
-
+    createStockData();
 });
 
 export default router;
