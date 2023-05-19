@@ -3,11 +3,13 @@ import { createClient } from 'redis';
 
 dotenv.config();
 
+
 export function connectRedis() {
+
     const client = createClient();
 
     // on error event
-    client.on('error', (err) => {
+    client.on('error', err => {
         console.error('Redis Client Error', err);
         throw err;
     });
@@ -19,7 +21,6 @@ export function connectRedis() {
             throw err;
         } else {
             console.log('Redis connection succesfull!!!');
-            // req.redisClient = client;
             throw err;
         }
     });
@@ -28,6 +29,17 @@ export function connectRedis() {
         console.log('Redis connection Established');
     });
 
-    return client;
+    window.addEventListener('beforeunload', () => {
+        closeRedisConnection(client); // Close Redis connection when the user leaves the web app
+    });
+}
 
+export function closeRedisConnection(client) {
+    client.quit((err, reply) => {
+        if (err) {
+            console.error('Error closing Redis connection:', err);
+        } else {
+            console.log('Redis connection closed');
+        }
+    });
 }
