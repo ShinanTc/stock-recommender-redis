@@ -22,6 +22,15 @@ export async function scrapeStockData() {
             const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
             popupCloseBtn.click();
 
+            // getting text content
+            const textContent = await page.evaluate(() => {
+                const spanElement = document.querySelector('#myGroup > tr:nth-child(1) > td:nth-child(1) > span.nse-bse.ng-star-inserted');
+                return spanElement.textContent.trim(); // removes whitespaces from the beginning and end
+            });
+
+            console.log('textContent');
+            console.log(textContent);
+
         }, 12000);
 
         // await browser.close();
