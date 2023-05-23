@@ -27,11 +27,33 @@ export async function scrapeStockData() {
 
             console.log("Pop up closed");
 
-            const stockTickerSymbolXpath = await page.$x('//*[@id="myGroup"]/tr[1]/td[1]/span[1]'); // Replace "//xpath/here" with your desired XPath expression
-            let stockTickerSymbol = await page.evaluate(el => el.textContent, stockTickerSymbolXpath[0]);
 
-            // getting the stock ticker symbol (Eg: TATAPOWER)
-            stockTickerSymbol = stockTickerSymbol.split(' ')[0].trim();
+
+            let i = 1;
+            let stockTickerSymbolArr = [];
+
+            while (i < 20) {
+
+                let stockTickerSymbolXpath = await page.$x(`//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`); // Replace "//xpath/here" with your desired XPath expression
+                let stockTickerSymbol = await page.evaluate(el => el.textContent, stockTickerSymbolXpath[0]);
+
+                // getting the stock ticker symbol (Eg: TATAPOWER)
+                stockTickerSymbol = stockTickerSymbol.split(' ')[0].trim();
+
+                stockTickerSymbolArr.push(stockTickerSymbol);
+
+                i += 2;
+            }
+
+
+            console.log('stockTickerSymbolArr');
+            console.log(stockTickerSymbolArr);
+
+            // const stockTickerSymbolXpath = await page.$x('//*[@id="myGroup"]/tr[1]/td[1]/span[1]'); // Replace "//xpath/here" with your desired XPath expression
+            // let stockTickerSymbol = await page.evaluate(el => el.textContent, stockTickerSymbolXpath[0]);
+
+            // // getting the stock ticker symbol (Eg: TATAPOWER)
+            // stockTickerSymbol = stockTickerSymbol.split(' ')[0].trim();
 
         }, 12000);
 
@@ -39,13 +61,9 @@ export async function scrapeStockData() {
         //*[@id="myGroup"]/tr[1]/td[1]/span[1]
         //*[@id="myGroup"]/tr[3]/td[1]/span[1]
         //*[@id="myGroup"]/tr[5]/td[1]/span[1]
+        // ...
+        //*[@id="myGroup"]/tr[19]/td[1]/span[1]
 
-        // fullxpath of stock names
-        // /html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/app-stock-view-items/div/div/table/tbody/tr[1]/td[1]/span[1]
-        // /html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/app-stock-view-items/div/div/table/tbody/tr[3]/td[1]/span[1]
-        // /html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/app-stock-view-items/div/div/table/tbody/tr[5]/td[1]/span[1]/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/app-stock-view-items/div/div/table/tbody/tr[5]/td[1]/span[1]
-
-        // await browser.close();
     } catch (error) {
         throw error;
     }
