@@ -4,8 +4,8 @@ import puppeteer, { Keyboard } from 'puppeteer';
 export async function scrapeStockData() {
 
     try {
-        const browser = await puppeteer.launch({ headless: false });
-        // const browser = await puppeteer.launch({ headless: 'new' });
+        // const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
         const page = (await browser.pages())[0];
@@ -27,6 +27,7 @@ export async function scrapeStockData() {
 
             console.log("Pop up closed");
 
+
             // go to the very last page
             await page.waitForSelector('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
             const element = await page.$('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
@@ -36,12 +37,18 @@ export async function scrapeStockData() {
             console.log('Clicking "Last" button successfull');
 
 
+            // get the total no of pages
+            await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[4]/a');
+            const elt = await page.$x('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[4]/a');
+            let totalNumberOfPages = await page.evaluate(el => el.textContent, elt[0]);
 
+            // getting only the number from the string
+            totalNumberOfPages = totalNumberOfPages.split(' ')[1].trim();  // trim - for removing whitespaces
 
+            // converting string to integer
+            totalNumberOfPages = parseInt(totalNumberOfPages);
 
-
-
-
+            console.log("Gathered total no of pages");
 
 
 
