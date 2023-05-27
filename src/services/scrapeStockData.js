@@ -1,11 +1,11 @@
-import puppeteer, { Keyboard } from 'puppeteer';
+import puppeteer from 'puppeteer';
 
 // go to the website
 export async function scrapeStockData() {
 
     try {
-        const browser = await puppeteer.launch({ headless: false });
-        // const browser = await puppeteer.launch({ headless: 'new' });
+        // const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
         const page = (await browser.pages())[0];
@@ -14,7 +14,7 @@ export async function scrapeStockData() {
 
         console.log("Going to datasource...");
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/');
 
         console.log("Waiting for pop-up");
 
@@ -27,77 +27,44 @@ export async function scrapeStockData() {
 
             console.log("Pop up closed");
 
+            // counting number of stocks in the current page
+            let numberOfStocks = 0;
+            let i = 1; // Start with the initial value for `i`
 
-            // // go to the very last page
-            // await page.waitForSelector('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
-            // const lastPage = await page.$('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
-            // await lastPage.scrollIntoView();
-            // await page.evaluate(el => el.click(), lastPage);
+            while (true) {
 
-            // console.log('Clicking "Last" button successfull');
+                let element = await waitForXPathAndReturnElements(page, `//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`);
 
+                // if the function returned a timout error (took too long to respond)
+                if (element === 'TimeoutError') {
 
-            // get the total no of pages
-            await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[4]/a');
-            const numberOfPagesXpath = await page.$x('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[4]/a');
-            let totalNumberOfPages = await page.evaluate(el => el.textContent, numberOfPagesXpath[0]);
+                    let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
-            // this means then the xpath of elements may have changed,
-            // because totalNumberOfPages variable should have a number
-            if (isNumber(totalNumberOfPages) === false) {
-                console.error("ERROR : This is not a number");
+                    // if clickNext returned a timeout error, which means,
+                    // Either it is a network issue or we have reached the page before the last page,
+                    // Next button to the last page has a different selector than we used to get untill there
+                    // so we change the selector
+                    if (returnValue === 'TimeoutError') {
+                        let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
+
+                        // if this returns a 'TimeoutError',
+                        // that means we came to the last page
+                        if (returnValue === 'TimeoutError') {
+                            break;
+                        }
+
+                    }
+
+                } else {
+                    numberOfStocks++;
+                    i += 2; // Increment 'i' to move to the next row
+                }
+
             }
 
-            // getting only the number from the string
-            totalNumberOfPages = totalNumberOfPages.split(' ')[1]?.trim();
+            console.log("Outside of while loop");
 
-            // converting string to integer
-            totalNumberOfPages = parseInt(totalNumberOfPages);
-
-            console.log("Gathered total no of pages : " + totalNumberOfPages);
-
-            // go back to the first page
-            await page.waitForSelector('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(1) > a');
-            const firstPage = await page.$('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(1) > a');
-            await firstPage.scrollIntoView();
-            await page.evaluate(el => el.click(), firstPage);
-
-            console.log('Going to the first page successfull');
-
-
-
-            // let i = 1;
-
-            // acting as a database
-            // let stockTickerSymbolArr = [];
-
-            // while (i < 20) {
-
-            //     // getting the stock ticker symbol (Eg: TATAPOWER)
-            //     let stockTickerSymbolXpath = await page.$x(`//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`); // Replace "//xpath/here" with your desired XPath expression
-            //     let stockTickerSymbol = await page.evaluate(el => el.textContent, stockTickerSymbolXpath[0]);
-
-            //     stockTickerSymbol = stockTickerSymbol.split(' ')[0].trim();
-
-            //     stockTickerSymbolArr.push(stockTickerSymbol);
-
-            //     i += 2;
-
-            // }
-
-
-            // console.log('stockTickerSymbolArr');
-            // console.log(stockTickerSymbolArr);
-
-        }, 12000);
-
-        // go to the very last page
-        await page.waitForSelector('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
-        const lastPage = await page.$('body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(9) > a');
-        await lastPage.scrollIntoView();
-        await page.evaluate(el => el.click(), lastPage);
-
-        console.log('Clicking "Last" button successfull');
+        }, 13000);
 
     } catch (error) {
         throw error;
@@ -106,19 +73,45 @@ export async function scrapeStockData() {
 
 scrapeStockData();
 
-// check whether a given input is a number or not (not datatypes)
-// this function will even take '42' and 40 as numbers
-function isNumber(value) {
-    return typeof value === 'number' || !isNaN(parseInt(value));
+
+async function waitForXPathAndReturnElements(page, xPath) {
+
+    try {
+        await page.waitForXPath(xPath);
+        const elements = await page.$x(xPath);
+        return elements;
+    } catch (error) {
+        // Handle timeout error
+        if (error.name === 'TimeoutError')
+            return 'TimeoutError';
+    }
+
 }
 
+// clicking 'Next' button (going to the Next page)
+async function clickNext(page, selector) {
+    try {
 
+        // let selector = 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a';
 
+        await page.waitForSelector(selector);
+        const elements = await page.$(selector);
+        await elements.scrollIntoView();
+        await page.evaluate(el => el.click(), elements);
 
+        console.log('Going to the Next page');
 
-// xpath of stock names
-//*[@id="myGroup"]/tr[1]/td[1]/span[1]
-//*[@id="myGroup"]/tr[3]/td[1]/span[1]
-//*[@id="myGroup"]/tr[5]/td[1]/span[1]
-// ...
-//*[@id="myGroup"]/tr[19]/td[1]/span[1]
+    } catch (error) {
+
+        // checking if it is a timeout error
+        if (error.name === 'TimeoutError')
+            return 'TimeoutError';
+        else
+            throw error;
+
+    }
+}
+
+// NEXT BUTTON SELECTOR
+// body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a
+// body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a

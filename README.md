@@ -1,4 +1,2 @@
 # TODO
-
-[] Setup redis database
-[] Setup prisma for Object Relational Mapping (ORM)
+<!-- YET TO BE FIGURED -->
