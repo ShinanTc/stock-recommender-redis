@@ -43,6 +43,8 @@ export async function scrapeStockData() {
                     // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
                     // To handle this, we change the selector for the next button on the last page.
                     if (returnValue === 'TimeoutError') {
+                        // When we reach the page before the last page, the selector of the Next button changes.
+                        // To handle this, we call the clickNext function again with a different selector.
                         let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
 
                         // If this returns a 'TimeoutError', it indicates that we have reached the last page.
