@@ -40,15 +40,12 @@ export async function scrapeStockData() {
 
                     let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
-                    // if clickNext returned a timeout error, which means,
-                    // Either it is a network issue or we have reached the page before the last page,
-                    // Next button to the last page has a different selector than we used to get untill there
-                    // so we change the selector
+                    // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
+                    // To handle this, we change the selector for the next button on the last page.
                     if (returnValue === 'TimeoutError') {
                         let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
 
-                        // if this returns a 'TimeoutError',
-                        // that means we came to the last page
+                        // If this returns a 'TimeoutError', it indicates that we have reached the last page.
                         if (returnValue === 'TimeoutError') {
                             break;
                         }
@@ -64,7 +61,7 @@ export async function scrapeStockData() {
 
             console.log("Outside of while loop");
 
-        }, 13000);
+        }, 12000);
 
     } catch (error) {
         throw error;
@@ -92,8 +89,6 @@ async function waitForXPathAndReturnElements(page, xPath) {
 async function clickNext(page, selector) {
     try {
 
-        // let selector = 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a';
-
         await page.waitForSelector(selector);
         const elements = await page.$(selector);
         await elements.scrollIntoView();
@@ -111,7 +106,3 @@ async function clickNext(page, selector) {
 
     }
 }
-
-// NEXT BUTTON SELECTOR
-// body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a
-// body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a
