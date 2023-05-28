@@ -4,13 +4,12 @@ import puppeteer from 'puppeteer';
 export async function scrapeStockData() {
 
     try {
+
         // const browser = await puppeteer.launch({ headless: false });
         const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
         const page = (await browser.pages())[0];
-
-        // indiainfoline.com - for stock recommendation data
 
         console.log("Going to datasource...");
 
@@ -31,9 +30,17 @@ export async function scrapeStockData() {
             let numberOfStocks = 0;
             let i = 1; // Start with the initial value for `i`
 
+            // going throught the stock data in each page
             while (true) {
 
                 let element = await waitForXPathAndReturnElements(page, `//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`);
+
+                // getting the stock ticker name
+                let stockTickerName = await getStockTickerName(page, element);
+
+                console.log('stockTickerName');
+                console.log(stockTickerName);
+
 
                 // if the function returned a timout error (took too long to respond)
                 if (element === 'TimeoutError') {
@@ -43,14 +50,14 @@ export async function scrapeStockData() {
                     // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
                     // To handle this, we change the selector for the next button on the last page.
                     if (returnValue === 'TimeoutError') {
+
                         // When we reach the page before the last page, the selector of the Next button changes.
                         // To handle this, we call the clickNext function again with a different selector.
                         let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
 
                         // If this returns a 'TimeoutError', it indicates that we have reached the last page.
-                        if (returnValue === 'TimeoutError') {
+                        if (returnValue === 'TimeoutError')
                             break;
-                        }
 
                     }
 
@@ -72,6 +79,8 @@ export async function scrapeStockData() {
 
 scrapeStockData();
 
+
+// async function getDataByXpath(page, xPath) { }
 
 async function waitForXPathAndReturnElements(page, xPath) {
 
@@ -107,4 +116,15 @@ async function clickNext(page, selector) {
             throw error;
 
     }
+}
+
+// get stock ticker name
+async function getStockTickerName(page, element) {
+    let stockTickerName = await page.evaluate(el => el.textContent, element[0]);
+
+    // 'stockTickerName' will be like this : TATAPOWER | NSE
+    // so we need to extract the name only
+    stockTickerName = stockTickerName.split(' ')[0]?.trim();
+
+    return stockTickerName;
 }
