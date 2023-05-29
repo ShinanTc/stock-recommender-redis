@@ -30,8 +30,14 @@ export async function scrapeStockData() {
             let numberOfStocks = 0;
             let i = 1; // Start with the initial value for `i`
 
+            // gathered stocks
+            let stocks = [];
+
             // going throught the stock data in each page
-            while (i < 10) {
+            while (true) {
+
+                console.log('iteration');
+                console.log(i);
 
                 let xPaths = [
                     // stockTickerNameXpath
@@ -39,43 +45,59 @@ export async function scrapeStockData() {
                     // ltp
                     `//*[@id="myGroup"]/tr[${i}]/td[3]`,
                     // target
-                    `//*[@id="myGroup"]/tr[${i}]/td[4]/div/span[1]`,
-                    // profit percentage
-                    `//*[@id="myGroup"]/tr[${i}]/td[4]/div/span[2]`
+                    `//*[@id="myGroup"]/tr[${i}]/td[4]/div/span[1]`
                 ];
 
-                let element = await waitForXPathAndReturnElements(page, xPaths);
+                let element;
+
+                // i <= 21, because a page will only have maximum 10 stock datas, which means while loop iteration is only required untill i=21
+                // i = 21 is 10 iterations (i starts from 1 and increments by 2 for using as xpath)
+                // if (i <= 21)
+                element = await waitForXPathAndReturnElements(page, xPaths);
 
                 // getting the stock ticker name
-                let stockDetails = await getStockDetails(page, element);
+                let stockDetails = undefined;
 
-                // if the function returned a timout error (took too long to respond)
-                // if (element === 'TimeoutError') {
+                // if element is not TimeoutError
+                if (element !== 'TimeoutError')
+                    stockDetails = await getStockDetails(page, element);
 
-                //     let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
+                // to make sure it is not a BSE stock
+                if (stockDetails !== undefined)
+                    stocks.push(stockDetails);
 
-                //     // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
-                //     // To handle this, we change the selector for the next button on the last page.
-                //     if (returnValue === 'TimeoutError') {
+                // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
+                if (element === 'TimeoutError') {
 
-                //         // When we reach the page before the last page, the selector of the Next button changes.
-                //         // To handle this, we call the clickNext function again with a different selector.
-                //         let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
+                    console.log("Inside if");
 
-                //         // If this returns a 'TimeoutError', it indicates that we have reached the last page.
-                //         if (returnValue === 'TimeoutError')
-                //             break;
+                    let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
-                //     }
+                    i = 1;
 
-                // } else {
-                //     numberOfStocks++;
-                //     i += 2; // Increment 'i' to move to the next row
-                // }
+                    // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
+                    // To handle this, we change the selector for the next button on the last page.
+                    if (returnValue === 'TimeoutError') {
+
+                        // When we reach the page before the last page, the selector of the Next button changes.
+                        // To handle this, we call the clickNext function again with a different selector.
+                        let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
+
+                        // If this returns a 'TimeoutError', it indicates that we have reached the last page.
+                        if (returnValue === 'TimeoutError')
+                            break;
+
+                    }
+
+                } else {
+                    numberOfStocks++;
+                    i += 2; // Increment 'i' to move to the next row
+                }
 
             }
 
-            console.log("Outside of while loop");
+            console.log('stocks');
+            console.log(stocks);
 
         }, 12000);
 
@@ -87,14 +109,9 @@ export async function scrapeStockData() {
 scrapeStockData();
 
 
-// async function getDataByXpath(page, xPath) { }
-
 async function waitForXPathAndReturnElements(page, xPaths) {
 
     try {
-        // await page.waitForXPath(xPath);
-        // const elements = await page.$x(xPath);
-        // return elements;
 
         const promises = xPaths.map(xpath => page.waitForXPath(xpath));
         const element = await Promise.all(promises);
@@ -136,14 +153,22 @@ async function getStockDetails(page, element) {
     let stockTickerName = await page.evaluate(el => el.textContent, element[0]);
     let ltp = await page.evaluate(el => el.textContent, element[1]);
     let target = await page.evaluate(el => el.textContent, element[2]);
-    let profitPercentage = await page.evaluate(el => el.textContent, element[3]);
 
     // 'stockTickerName' will be like this : TATAPOWER | NSE, so we need to extract the name only
     // log each variable for better understanding
+    let exchange = await stockTickerName.split(' ')[2].trim();
     stockTickerName = await stockTickerName.split(' ')[0]?.trim();
     ltp = await ltp.split(' ')[2]?.trim();
     target = await target.trim();
-    profitPercentage = await profitPercentage.replace(/[()]/g, '').trim();
 
-    return { stockTickerName, ltp, target, profitPercentage };
+    // there is a ₹20/- fee on selling a stock
+    let profitAfterTradingExpense = (parseInt(target) - parseInt(ltp)) - 20;
+
+    // we are not considering BSE stocks
+    if (exchange === 'BSE')
+        return;
+
+    let stockData = `${stockTickerName}-${ltp}-${target}-${profitAfterTradingExpense}`;
+
+    return stockData;
 }
