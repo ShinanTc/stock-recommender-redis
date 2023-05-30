@@ -17,6 +17,9 @@ export async function scrapeStockData() {
 
         console.log("Waiting for pop-up");
 
+        // gathered stocks
+        let stocks = [];
+
         setTimeout(async () => {
 
             // close the popup button
@@ -29,9 +32,6 @@ export async function scrapeStockData() {
             // counting number of stocks in the current page
             let numberOfStocks = 0;
             let i = 1; // Start with the initial value for `i`
-
-            // gathered stocks
-            let stocks = [];
 
             // going throught the stock data in each page
             while (true) {
@@ -95,6 +95,8 @@ export async function scrapeStockData() {
 
         }, 12000);
 
+        return stocks;
+
     } catch (error) {
         throw error;
     }
@@ -103,6 +105,7 @@ export async function scrapeStockData() {
 scrapeStockData();
 
 
+// for getting the elements using xpath
 async function waitForXPathAndReturnElements(page, xPaths) {
 
     try {
