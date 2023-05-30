@@ -5,15 +5,15 @@ export async function scrapeStockData() {
 
     try {
 
-        const browser = await puppeteer.launch({ headless: false });
-        // const browser = await puppeteer.launch({ headless: 'new' });
+        // const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
         const page = (await browser.pages())[0];
 
         console.log("Going to datasource...");
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/21');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/');
 
         console.log("Waiting for pop-up");
 
@@ -32,8 +32,6 @@ export async function scrapeStockData() {
 
             // gathered stocks
             let stocks = [];
-
-            console.time('timer');
 
             // going throught the stock data in each page
             while (true) {
@@ -60,7 +58,7 @@ export async function scrapeStockData() {
                 let stockDetails = undefined;
 
                 // if element is not TimeoutError
-                if (element !== 'TimeoutError')
+                if (element !== "TimeoutError")
                     stockDetails = await getStockDetails(page, element);
 
                 // to make sure it is not a BSE stock
@@ -94,11 +92,6 @@ export async function scrapeStockData() {
                 }
 
             }
-
-            console.timeEnd('timer');
-
-            // console.log('stocks');
-            // console.log(stocks);
 
         }, 12000);
 
@@ -149,7 +142,7 @@ async function clickNext(page, selector) {
     }
 }
 
-// get stock ticker name
+// get stock details from elements/xpaths
 async function getStockDetails(page, element) {
     let stockTickerName = await page.evaluate(el => el.textContent, element[0]);
     let ltp = await page.evaluate(el => el.textContent, element[1]);
