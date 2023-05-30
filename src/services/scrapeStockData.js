@@ -13,7 +13,7 @@ export async function scrapeStockData() {
 
         console.log("Going to datasource...");
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/21');
 
         console.log("Waiting for pop-up");
 
@@ -33,11 +33,10 @@ export async function scrapeStockData() {
             // gathered stocks
             let stocks = [];
 
+            console.time('timer');
+
             // going throught the stock data in each page
             while (true) {
-
-                console.log('iteration');
-                console.log(i);
 
                 let xPaths = [
                     // stockTickerNameXpath
@@ -52,8 +51,10 @@ export async function scrapeStockData() {
 
                 // i <= 21, because a page will only have maximum 10 stock datas, which means while loop iteration is only required untill i=21
                 // i = 21 is 10 iterations (i starts from 1 and increments by 2 for using as xpath)
-                // if (i <= 21)
-                element = await waitForXPathAndReturnElements(page, xPaths);
+                if (i <= 21)
+                    element = await waitForXPathAndReturnElements(page, xPaths);
+                else
+                    element = "TimeoutError";
 
                 // getting the stock ticker name
                 let stockDetails = undefined;
@@ -68,8 +69,6 @@ export async function scrapeStockData() {
 
                 // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
                 if (element === 'TimeoutError') {
-
-                    console.log("Inside if");
 
                     let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
@@ -96,8 +95,10 @@ export async function scrapeStockData() {
 
             }
 
-            console.log('stocks');
-            console.log(stocks);
+            console.timeEnd('timer');
+
+            // console.log('stocks');
+            // console.log(stocks);
 
         }, 12000);
 
