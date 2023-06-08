@@ -1,22 +1,34 @@
 import { getClient } from "../../config/db/redis-config.js";
+import { scrapeStockData } from "../../services/scrapeStockData.js";
 
 // create stock data
-export async function createStockData(stockData) {
+export async function createStockData() {
 
-    let client = getClient();
+    try {
 
-    client.set('stockdata', 'HDFCBANK');
-    let stockName = await client.get('stockname');
+        // getting the created redis client
+        let client = await getClient();
+
+        let stockData = await scrapeStockData();
+
+        for (var i = 0; i < stockData.length; i++) {
+            console.log(i);
+
+            // key : value
+            await client.set(i + 1, stockData[i]);
+        }
+
+        // let currentDateTime = new Date();
+
+        // // adding the last scraped time
+        // await client.set('last-updated', currentDateTime);
+
+        // console.log("Data saved to database");
+
+    } catch (error) {
+        throw error;
+    }
+
 }
 
-// get stock data
-// async function getStockData(client) {
-//     let stockName = await client.get('stockname');
-    // https://www.indiainfoline.com/stock-ideas
-// }
-
-// delete stock data
-// async function deleteStockData(client) {
-//     client.del('stockname', 'HDFCBANK');
-//     let stockName = await client.get('stockname');
-// }
+createStockData();
