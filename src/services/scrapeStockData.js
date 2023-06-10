@@ -196,8 +196,14 @@ async function getNumberOfStockPages(page) {
             let numberOfStockPages = await page.evaluate(element => element.textContent, numberOfStockPagesElement);
             numberOfStockPages = parseInt(numberOfStockPages.split(' ')[1]);
 
+            // going back to the first page, to start the iteration
+            let firstPage = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[1]/a');
+            await firstPage.click();
+
             // Resolve the promise with the number of stock pages
             resolve(numberOfStockPages);
         }, 2000);
     });
 }
+
+// /html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[1]/a
