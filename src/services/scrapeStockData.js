@@ -33,8 +33,15 @@ export async function scrapeStockData() {
             let numberOfStocks = 0;
             let i = 1; // Start with the initial value for `i`
 
+            // get the number of pages
+            let numberOfStockPages = await getNumberOfStockPages(page);
+
+            console.log(`We have ${numberOfStockPages} stock pages`);
+
+            let pageNumber = 0;
+
             // going throught the stock data in each page
-            while (true) {
+            while (pageNumber <= numberOfStockPages) {
 
                 let xPaths = [
                     // stockTickerNameXpath
@@ -45,16 +52,14 @@ export async function scrapeStockData() {
                     `//*[@id="myGroup"]/tr[${i}]/td[4]/div/span[1]`
                 ];
 
-                let numberOfStockPages = await getNumberOfStockPages(page);
+                let element;
 
-                // let element;
-
-                // // i <= 21, because a page will only have maximum 10 stock datas, which means while loop iteration is only required untill i=21
-                // // i = 21 is 10 iterations (i starts from 1 and increments by 2 for using as xpath)
-                // if (i <= 21)
-                //     element = await waitForXPathAndReturnElements(page, xPaths);
-                // else
-                //     element = "TimeoutError";
+                // i <= 21, because a page will only have maximum 10 stock datas, which means while loop iteration is only required untill i=21
+                // i = 21 is 10 iterations (i starts from 1 and increments by 2 for using as xpath)
+                if (i <= 21)
+                    element = await waitForXPathAndReturnElements(page, xPaths);
+                else
+                    element = "TimeoutError";
 
                 // // getting the stock ticker name
                 // let stockDetails = undefined;
@@ -174,17 +179,25 @@ async function getStockDetails(page, element) {
 
 // for getting the no of pages 
 async function getNumberOfStockPages(page) {
-    const lastPage = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[9]/a');
-    await lastPage.click();
+    return new Promise(async (resolve, reject) => {
+        // Wait for the "Last" page element
+        const lastPage = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[9]/a');
 
-    const numberOfStockPagesElement = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[3]/a');
-    let numberOfStockPages = await page.evaluate(element => element.textContent, numberOfStockPagesElement);
+        // Delay the click action by 2 seconds, because sometimes the scraper just hover on the 'Last' button than clicking it
+        setTimeout(async () => {
 
-    numberOfStockPages = await numberOfStockPages.split(' ')[1];
+            // Click on the "Last" page element
+            await lastPage.click();
 
-    // converting to integer
-    numberOfStockPages = parseInt(numberOfStockPages);
+            // Wait for the element displaying the number of stock pages
+            const numberOfStockPagesElement = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[3]/a');
 
-    return numberOfStockPages;
+            // Extract the text content from the element and parse the number of stock pages
+            let numberOfStockPages = await page.evaluate(element => element.textContent, numberOfStockPagesElement);
+            numberOfStockPages = parseInt(numberOfStockPages.split(' ')[1]);
+
+            // Resolve the promise with the number of stock pages
+            resolve(numberOfStockPages);
+        }, 2000);
+    });
 }
-
