@@ -11,19 +11,8 @@ export async function createStockData() {
 
         let stockData = await scrapeStockData();
 
-        for (var i = 0; i < stockData.length; i++) {
-            console.log(i);
-
-            // key : value
-            await client.set(i + 1, stockData[i]);
-        }
-
-        // let currentDateTime = new Date();
-
-        // // adding the last scraped time
-        // await client.set('last-updated', currentDateTime);
-
-        // console.log("Data saved to database");
+        console.log('stockData');
+        console.log(stockData);
 
     } catch (error) {
         throw error;

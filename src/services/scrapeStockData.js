@@ -33,15 +33,8 @@ export async function scrapeStockData() {
             let numberOfStocks = 0;
             let i = 1; // Start with the initial value for `i`
 
-            // get the number of pages
-            let numberOfStockPages = await getNumberOfStockPages(page);
-
-            console.log(`We have ${numberOfStockPages} stock pages`);
-
-            let pageNumber = 0;
-
             // going throught the stock data in each page
-            while (pageNumber <= numberOfStockPages) {
+            while (true) {
 
                 let xPaths = [
                     // stockTickerNameXpath
@@ -61,55 +54,53 @@ export async function scrapeStockData() {
                 else
                     element = "TimeoutError";
 
-                // // getting the stock ticker name
-                // let stockDetails = undefined;
+                // getting the stock ticker name
+                let stockDetails = undefined;
 
-                // // if element is not TimeoutError
-                // if (element !== "TimeoutError")
-                //     stockDetails = await getStockDetails(page, element);
+                // if element is not TimeoutError
+                if (element !== "TimeoutError")
+                    stockDetails = await getStockDetails(page, element);
 
-                // // to make sure it is not a BSE stock
-                // if (stockDetails !== undefined)
-                //     stocks.push(stockDetails);
+                // to make sure it is not a BSE stock
+                if (stockDetails !== undefined)
+                    stocks.push(stockDetails);
 
-                // // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
-                // if (element === 'TimeoutError') {
+                // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
+                if (element === 'TimeoutError') {
 
-                //     let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
+                    let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
-                //     i = 1;
+                    i = 1;
 
-                //     // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
-                //     // To handle this, we change the selector for the next button on the last page.
-                //     if (returnValue === 'TimeoutError') {
+                    // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
+                    // To handle this, we change the selector for the next button on the last page.
+                    if (returnValue === 'TimeoutError') {
 
-                //         // When we reach the page before the last page, the selector of the Next button changes.
-                //         // To handle this, we call the clickNext function again with a different selector.
-                //         let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
+                        // When we reach the page before the last page, the selector of the Next button changes.
+                        // To handle this, we call the clickNext function again with a different selector.
+                        let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
 
-                //         // If this returns a 'TimeoutError', it indicates that we have reached the last page.
-                //         if (returnValue === 'TimeoutError')
-                //             break;
+                        // If this returns a 'TimeoutError', it indicates that we have reached the last page.
+                        if (returnValue === 'TimeoutError')
+                            break;
 
-                //     }
+                    }
 
-                // } else {
-                //     numberOfStocks++;
-                //     i += 2; // Increment 'i' to move to the next row
-                // }
+                } else {
+                    numberOfStocks++;
+                    i += 2; // Increment 'i' to move to the next row
+                }
 
             }
 
         }, 12000);
 
-        // return stocks;
+        return stocks;
 
     } catch (error) {
         throw error;
     }
 }
-
-scrapeStockData();
 
 
 // for getting the elements using xpath
@@ -173,37 +164,5 @@ async function getStockDetails(page, element) {
         return;
 
     let stockData = `${stockTickerName}-${ltp}-${target}-${profitAfterTradingExpense}`;
-
     return stockData;
 }
-
-// for getting the no of pages 
-async function getNumberOfStockPages(page) {
-    return new Promise(async (resolve, reject) => {
-        // Wait for the "Last" page element
-        const lastPage = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[9]/a');
-
-        // Delay the click action by 2 seconds, because sometimes the scraper just hover on the 'Last' button than clicking it
-        setTimeout(async () => {
-
-            // Click on the "Last" page element
-            await lastPage.click();
-
-            // Wait for the element displaying the number of stock pages
-            const numberOfStockPagesElement = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[3]/a');
-
-            // Extract the text content from the element and parse the number of stock pages
-            let numberOfStockPages = await page.evaluate(element => element.textContent, numberOfStockPagesElement);
-            numberOfStockPages = parseInt(numberOfStockPages.split(' ')[1]);
-
-            // going back to the first page, to start the iteration
-            let firstPage = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[1]/a');
-            await firstPage.click();
-
-            // Resolve the promise with the number of stock pages
-            resolve(numberOfStockPages);
-        }, 2000);
-    });
-}
-
-// /html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/div/app-pagination/div/ngb-pagination/ul/li[1]/a
