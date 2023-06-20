@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import { collectStockInformation } from '../helpers/scrape/scrapeStockDataHelpers.js';
 
 // go to the website
 export async function scrapeStockData() {
@@ -8,87 +9,37 @@ export async function scrapeStockData() {
         // getting the first tab
         const page = (await browser.pages())[0];
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/20');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/22');
+
+        let stocks;
 
         // Wrap the scraping process in a promise
         const stocksPromise = new Promise(async (resolve, reject) => {
             setTimeout(async () => {
 
-                // gathered stocks
-                let stocks = [];
-
                 try {
 
                     // close the popup button
                     const popupCloseBtnXpath = '/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img';
-                    const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
+                    const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath, { timeout: 1 });
                     popupCloseBtn.click();
 
-                    // counting number of stocks in the current page
-                    let numberOfStocks = 0;
-                    let i = 1; // Start with the initial value for `i`
-
-                    // going throught the stock data in each page
-                    while (true) {
-                        let xPaths = [
-                            // stockTickerNameXpath
-                            `//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`, // stockTickerNameXpath
-                            // ltp
-                            `//*[@id="myGroup"]/tr[${i}]/td[3]`, // ltp
-                            // target
-                            `//*[@id="myGroup"]/tr[${i}]/td[4]/div/span[1]` // target
-                        ];
-
-                        let element;
-
-                        // Scrape the stock data for each row
-                        // i <= 21, because a page will only have maximum 10 stock datas, which means while loop iteration is only required untill i=21
-                        // i = 21 is 10 iterations (i starts from 1 and increments by 2 for using as xpath)
-                        if (i <= 21)
-                            element = await waitForXPathAndReturnElements(page, xPaths);
-                        else
-                            element = "TimeoutError";
-
-                        let stockDetails = undefined;
-
-                        // Extract the stock details if element is not TimeoutError
-                        if (element !== "TimeoutError")
-                            stockDetails = await getStockDetails(page, element);
-
-                        // Add the stock details to the stocks array
-                        if (stockDetails !== undefined)
-                            stocks.push(stockDetails);
-
-                        // Check if we need to click next for more rows
-                        // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
-                        if (element === 'TimeoutError') {
-
-                            let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
-
-                            i = 1;
-
-                            // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
-                            // To handle this, we change the selector for the next button on the last page.
-                            if (returnValue === 'TimeoutError') {
-
-                                // When we reach the page before the last page, the selector of the Next button changes.
-                                // To handle this, we call the clickNext function again with a different selector.
-                                let nextPage = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
-
-                                // If this returns a 'TimeoutError', it indicates that we have reached the last page
-                                if (nextPage === 'TimeoutError' || nextPage === undefined) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            numberOfStocks++;
-                            i += 2; // Increment 'i' to move to the next row
-                        }
-                    }
+                    stocks = collectStockInformation(page);
 
                     resolve(stocks); // Resolve the promise with the stocks array
                 } catch (error) {
-                    reject(error); // Reject the promise if an error occurs
+
+                    // error message when the pop up did not appear
+                    let errorMsg = 'Waiting for selector `/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img` failed: Waiting failed: 1ms exceeded';
+
+                    // if it is a timeout error (that pop up didn't appear)
+                    if (error.name === "TimeoutError" && error.message === errorMsg) {
+                        stocks = await collectStockInformation(page);
+                        resolve(stocks);  // Resolve the promise with the stocks array
+                    } else {
+                        reject(error); // Reject the promise if an error occurs
+                    }
+
                 }
             }, 12000); // Set the timeout duration for the scraping process
         });
@@ -97,70 +48,4 @@ export async function scrapeStockData() {
     } catch (error) {
         throw error; // Throw any error that occurs during the process
     }
-}
-
-// for getting the elements using xpath
-async function waitForXPathAndReturnElements(page, xPaths) {
-
-    try {
-
-        const promises = xPaths.map(xpath => page.waitForXPath(xpath));
-        const element = await Promise.all(promises);
-
-        return element;
-
-    } catch (error) {
-        // Handle timeout error
-        if (error.name === 'TimeoutError')
-            return 'TimeoutError';
-    }
-
-}
-
-// clicking 'Next' button (going to the Next page)
-async function clickNext(page, selector) {
-    try {
-
-        await page.waitForSelector(selector);
-        const elements = await page.$(selector);
-        await elements.scrollIntoView();
-        await page.evaluate(el => el.click(), elements);
-
-        console.log('Going to the Next page');
-
-    } catch (error) {
-
-        console.log("This is an error");
-
-        // checking if it is a timeout error
-        if (error.name === 'TimeoutError')
-            return 'TimeoutError';
-        else
-            throw error;
-
-    }
-}
-
-// get stock details from elements/xpaths
-async function getStockDetails(page, element) {
-    let stockTickerName = await page.evaluate(el => el.textContent, element[0]);
-    let ltp = await page.evaluate(el => el.textContent, element[1]);
-    let target = await page.evaluate(el => el.textContent, element[2]);
-
-    // 'stockTickerName' will be like this : TATAPOWER | NSE, so we need to extract the name only
-    // log each variable for better understanding
-    let exchange = await stockTickerName.split(' ')[2].trim();
-    stockTickerName = await stockTickerName.split(' ')[0]?.trim();
-    ltp = await ltp.split(' ')[2]?.trim();
-    target = await target.trim();
-
-    // there is a ₹20/- fee on selling a stock
-    let profitAfterTradingExpense = (parseInt(target) - parseInt(ltp)) - 20;
-
-    // we are not considering BSE stocks
-    if (exchange === 'BSE')
-        return;
-
-    let stockData = `${stockTickerName}-${ltp}-${target}-${profitAfterTradingExpense}`;
-    return stockData;
 }
