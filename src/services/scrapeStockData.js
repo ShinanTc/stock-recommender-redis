@@ -9,7 +9,7 @@ export async function scrapeStockData() {
         // getting the first tab
         const page = (await browser.pages())[0];
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/21');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/');
 
         let stocks;
 
@@ -21,7 +21,7 @@ export async function scrapeStockData() {
 
                     // close the popup button
                     const popupCloseBtnXpath = '/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img';
-                    const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath, { timeout: 1 });
+                    const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
                     popupCloseBtn.click();
 
                     stocks = collectStockInformation(page);
@@ -30,7 +30,7 @@ export async function scrapeStockData() {
                 } catch (error) {
 
                     // error message when the pop up did not appear
-                    let errorMsg = 'Waiting for selector `/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img` failed: Waiting failed: 1ms exceeded';
+                    let errorMsg = 'Waiting for selector `/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img` failed: Waiting failed: 30000ms exceeded';
 
                     // if it is a timeout error (that pop up didn't appear)
                     if (error.name === "TimeoutError" && error.message === errorMsg) {
