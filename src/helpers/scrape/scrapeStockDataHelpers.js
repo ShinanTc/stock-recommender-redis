@@ -6,6 +6,9 @@ export async function waitForXPathAndReturnElements(page, xPaths) {
         const promises = xPaths.map(xpath => page.waitForXPath(xpath));
         const element = await Promise.all(promises);
 
+        console.log('\n\n element');
+        console.log(element);
+
         return element;
 
     } catch (error) {
@@ -75,8 +78,18 @@ export async function collectStockInformation(page) {
     let numberOfStocks = 0;
     let i = 1; // Start with the initial value for `i`
 
+    // In some scenarios, there wont be any stock data instead there will be a text like "No record found"
+    // In that case, we have to stop the process
+    let noRecordsElt = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/p');
+    let noRecord = await page.evaluate(el => el.textContent, noRecordsElt);
+
+    if (noRecord === 'No Record Found') {
+        return stocks;
+    }
+
     // going throught the stock data in each page
     while (true) {
+
         let xPaths = [
             // stockTickerNameXpath
             `//*[@id="myGroup"]/tr[${i}]/td[1]/span[1]`, // stockTickerNameXpath

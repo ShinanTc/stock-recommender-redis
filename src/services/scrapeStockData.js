@@ -9,7 +9,7 @@ export async function scrapeStockData() {
         // getting the first tab
         const page = (await browser.pages())[0];
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/22');
+        await page.goto('https://www.indiainfoline.com/stock-ideas/21');
 
         let stocks;
 
@@ -35,8 +35,10 @@ export async function scrapeStockData() {
                     // if it is a timeout error (that pop up didn't appear)
                     if (error.name === "TimeoutError" && error.message === errorMsg) {
                         stocks = await collectStockInformation(page);
+                        await browser.close();
                         resolve(stocks);  // Resolve the promise with the stocks array
                     } else {
+                        await browser.close();
                         reject(error); // Reject the promise if an error occurs
                     }
 
