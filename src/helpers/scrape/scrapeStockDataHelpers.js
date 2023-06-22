@@ -74,7 +74,7 @@ export async function collectStockInformation(page) {
     // counting number of stocks in the current page
     let numberOfStocks = 0;
     let i = 1; // Start with the initial value for `i`
-
+    let reachedPageBeforeLastPage = false;
 
     try {
         // In some scenarios, there wont be any stock data instead there will be a text like "No record found"
@@ -135,8 +135,10 @@ export async function collectStockInformation(page) {
                     let nextPage = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(5) > a');
 
                     // If this returns a 'TimeoutError', it indicates that we have reached the last page
-                    if (nextPage === 'TimeoutError' || nextPage === undefined) {
+                    if (reachedPageBeforeLastPage || nextPage === 'TimeoutError') {
                         break;
+                    } else {
+                        reachedPageBeforeLastPage = true;
                     }
                 }
             } else {
