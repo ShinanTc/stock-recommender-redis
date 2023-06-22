@@ -40,6 +40,8 @@ export async function clickNext(page, selector) {
 
 // get stock details from elements/xpaths
 export async function getStockDetails(page, element) {
+
+    // getting the text from those x paths
     let stockTickerName = await page.evaluate(el => el.textContent, element[0]);
     let ltp = await page.evaluate(el => el.textContent, element[1]);
     let target = await page.evaluate(el => el.textContent, element[2]);
@@ -51,17 +53,21 @@ export async function getStockDetails(page, element) {
     ltp = await ltp.split(' ')[2]?.trim();
     target = await target.trim();
 
+    // the reason we used replace function here is, sometimes the values are inappropriate without them
+    // try logging it without using the replace function for better understanding
+    target = parseInt(target.replace(',', ''));
+    ltp = parseInt(ltp.replace(',', ''));
+
     // there is a ₹20/- fee on selling a stock
-    let profitAfterTradingExpense = (parseInt(target) - parseInt(ltp)) - 20;
+    let profitAfterTradingExpense = target - ltp;
 
     // we are not considering BSE stocks
     if (exchange === 'BSE')
         return;
 
-    let stockData = `${stockTickerName}-${ltp}-${target}-${profitAfterTradingExpense}`;
+    let stockData = `${stockTickerName}|${ltp}|${target}|${profitAfterTradingExpense}`;
     return stockData;
 }
-
 
 // collect stock information from each page
 export async function collectStockInformation(page) {
