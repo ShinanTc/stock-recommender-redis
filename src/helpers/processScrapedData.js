@@ -32,3 +32,20 @@ export async function removeNonProfitableTrades(stockData) {
 
     return stockData;
 }
+
+// for getting the highest profitable trades from the scraped trades
+export async function getHighestProfitableTrades(stockData) {
+    let sortedData = stockData
+        .map(data => {
+            let target = data.split('|')[3];
+            return {
+                string: data,
+                value: parseInt(target)
+            };
+        })
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 5)
+        .map(item => item.string);
+
+    return sortedData;
+}

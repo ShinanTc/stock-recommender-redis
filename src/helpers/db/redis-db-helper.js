@@ -1,6 +1,6 @@
 import { getClient } from "../../config/db/redis-config.js";
 import { scrapeStockData } from "../../services/scrapeStockData.js";
-import { removeNaNvalues, removeNonProfitableTrades } from "../processScrapedData.js";
+import { removeNaNvalues, removeNonProfitableTrades, getHighestProfitableTrades } from "../processScrapedData.js";
 
 // create stock data
 export async function createStockData() {
@@ -12,11 +12,15 @@ export async function createStockData() {
 
         let stockData = await scrapeStockData();
 
-        // removing NaN values
+        // // removing NaN values
         stockData = await removeNaNvalues(stockData);
 
-        // removing trades on loss
+        // // removing trades on loss
         stockData = await removeNonProfitableTrades(stockData);
+
+        stockData = await getHighestProfitableTrades(stockData);
+
+        // store these datas to the database
 
         console.log('stockData');
         console.log(stockData);
