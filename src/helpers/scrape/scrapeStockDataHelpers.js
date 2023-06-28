@@ -61,13 +61,13 @@ export async function getStockDetails(page, element) {
     ltp = parseInt(ltp.replace(',', ''));
 
     // there is a ₹20/- fee on selling a stock
-    let profitAfterTradingExpense = target - ltp;
+    let profit = target - ltp;
 
     // we are not considering BSE stocks
     if (exchange === 'BSE')
         return;
 
-    let stockData = `${stockTickerName}|${ltp}|${target}|${profitAfterTradingExpense}`;
+    let stockData = `${stockTickerName}|${ltp}|${target}|${profit}`;
     return stockData;
 }
 
