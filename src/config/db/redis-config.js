@@ -6,7 +6,9 @@ dotenv.config();
 let client = null;
 
 export function getClient() {
+
     if (!client) {
+
         client = createClient();
 
         // on error event
@@ -30,9 +32,6 @@ export function getClient() {
             console.log('Redis connection Established');
         });
 
-        // window.addEventListener('beforeunload', () => {
-        //     closeRedisConnection(client); // Close Redis connection when the user leaves the web app
-        // });
     }
 
     return client;
