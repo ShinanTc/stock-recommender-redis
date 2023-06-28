@@ -83,12 +83,14 @@ export async function collectStockInformation(page) {
     let reachedPageBeforeLastPage = false;
 
     try {
+        
         // In some scenarios, there wont be any stock data instead there will be a text like "No record found"
         // In that case, we have to stop the process
         let noRecordsElt = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/p');  // checking if there is a No record found message
 
         if (noRecordsElt)
             return stocks;
+            
     } catch (error) {
 
         // this step will only execute if there is no such element showing "No Record Found"
