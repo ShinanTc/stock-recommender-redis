@@ -72,13 +72,13 @@ export async function getStockDetails(page, element) {
 // collect stock information from each page
 export async function collectStockInformation(page) {
 
-    console.log('collecting stock information');
+    console.log('collecting stock information...');
 
     // gathered stocks
     let stocks = [];
 
     // counting number of stocks in the current page
-    let numberOfStocks = 0;
+    let numberOfStocks = 1;
     let i = 1; // Start with the initial value for `i`
     let reachedPageBeforeLastPage = false;
 
@@ -94,6 +94,7 @@ export async function collectStockInformation(page) {
         // this step will only execute if there is no such element showing "No Record Found"
         // going throught the stock data in each page
         while (true) {
+            console.log('Page No:' + numberOfStocks);
 
             let xPaths = [
                 // stockTickerNameXpath
@@ -128,6 +129,8 @@ export async function collectStockInformation(page) {
             // if the function returned a timout error (took too long to respond), that maybe because it scraped all the data in the current page
             if (element === 'TimeoutError') {
 
+                numberOfStocks++;
+
                 let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
                 i = 1;
@@ -148,7 +151,6 @@ export async function collectStockInformation(page) {
                     }
                 }
             } else {
-                numberOfStocks++;
                 i += 2; // Increment 'i' to move to the next row
             }
         }

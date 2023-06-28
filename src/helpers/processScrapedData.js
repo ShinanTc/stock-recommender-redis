@@ -49,3 +49,23 @@ export async function getHighestProfitableTrades(stockData) {
 
     return sortedData;
 }
+
+// turn the retrieved stockData into (key,value) format so that we can store it on redis
+export async function turnIntoKeyValueFormat(stockData) {
+
+    let newStockData = [];
+
+    for (var data of stockData) {
+
+        var obj = {
+            key: data.split('|')[0],
+            value: data
+        };
+
+        newStockData.push(obj);
+
+    }
+
+    return newStockData;
+
+}

@@ -4,7 +4,8 @@ import { collectStockInformation } from '../helpers/scrape/scrapeStockDataHelper
 // go to the website
 export async function scrapeStockData() {
     try {
-        const browser = await puppeteer.launch({ headless: false });
+        // const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
         const page = (await browser.pages())[0];
