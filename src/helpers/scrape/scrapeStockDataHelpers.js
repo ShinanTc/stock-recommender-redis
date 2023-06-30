@@ -80,7 +80,7 @@ export async function collectStockInformation(page) {
     let stocks = [];
 
     // counting number of stocks in the current page
-    let numberOfPagesScraped = 1;
+    let numberOfPagesScraped = 0;
     let i = 1; // Start with the initial value for `i`
     let reachedPageBeforeLastPage = false;
 
@@ -91,7 +91,7 @@ export async function collectStockInformation(page) {
         let noRecordsElt = await page.waitForXPath('/html/body/app-root/div/app-stock-view-details/div/div/div[1]/div/div/div[3]/div/p');  // checking if there is a No record found message
 
         if (noRecordsElt)
-            return stocks;
+            return { stocks, numberOfPagesScraped };
 
     } catch (error) {
 
