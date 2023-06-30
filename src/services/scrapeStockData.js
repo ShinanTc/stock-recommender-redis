@@ -12,7 +12,10 @@ export async function scrapeStockData() {
 
         await page.goto('https://www.indiainfoline.com/stock-ideas/');
 
-        let stocks;
+        let stockDetails = {
+            stocks: [],
+            scrapeCount: 1
+        };
 
         // Wrap the scraping process in a promise
         const stocksPromise = new Promise(async (resolve, reject) => {
@@ -25,9 +28,12 @@ export async function scrapeStockData() {
                     const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
                     popupCloseBtn.click();
 
-                    stocks = collectStockInformation(page);
+                    var { stocks, numberOfPagesScraped } = await collectStockInformation(page);
 
-                    resolve(stocks); // Resolve the promise with the stocks array
+                    stockDetails.stocks.push(stocks);
+                    stockDetails.scrapeCount = await numberOfPagesScraped;
+
+                    resolve(stockDetails.stocks); // Resolve the promise with the stocks array
                 } catch (error) {
 
                     // error message when the pop up did not appear
@@ -35,9 +41,15 @@ export async function scrapeStockData() {
 
                     // if it is a timeout error (that pop up didn't appear)
                     if (error.name === "TimeoutError" && error.message === errorMsg) {
-                        stocks = await collectStockInformation(page);
+
+                        var { stocks, numberOfPagesScraped } = await collectStockInformation(page);
+
+                        stockDetails.stocks.push(stocks);
+                        stockDetails.scrapeCount = await numberOfPagesScraped;
+
                         await browser.close();
-                        resolve(stocks);  // Resolve the promise with the stocks array
+
+                        resolve(stockDetails.stocks);  // Resolve the promise with the stocks array
                     } else {
                         await browser.close();
                         reject(error); // Reject the promise if an error occurs
