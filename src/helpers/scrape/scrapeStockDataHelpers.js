@@ -164,3 +164,25 @@ export async function collectStockInformation(page) {
     }
 
 }
+
+// for validating whether the scrape was accurate or not
+export async function validateScrape(stockDetails) {
+
+    // verify the scrape thrice
+    for (var i = 0; i < 3; i++) {
+        if (stockDetails.scrapeCount < 5) {
+            let { stocks, numberOfPagesScraped } = await collectStockInformation(page);
+
+            // emptying the array to avoid duplication
+            stockDetails.stocks = [];
+
+            stockDetails.stocks.push(stocks);
+            stockDetails.scrapeCount = await numberOfPagesScraped;
+        } else {
+            break;
+        }
+    }
+
+    return stockDetails;
+
+}
