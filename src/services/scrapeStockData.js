@@ -32,9 +32,6 @@ export async function scrapeStockData() {
                     stockDetails.stocks.push(stocks);
                     stockDetails.scrapeCount = await numberOfPagesScraped;
 
-                    console.log('stockDetails.scrapeCount');
-                    console.log(stockDetails.scrapeCount);
-
                     stockDetails = await validateScrape(stockDetails);
 
                     resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
@@ -50,9 +47,6 @@ export async function scrapeStockData() {
 
                         stockDetails.stocks.push(stocks);
                         stockDetails.scrapeCount = await numberOfPagesScraped;
-
-                        console.log('stockDetails.scrapeCount');
-                        console.log(stockDetails.scrapeCount);
 
                         stockDetails = await validateScrape(stockDetails);
 

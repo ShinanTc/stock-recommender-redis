@@ -184,13 +184,8 @@ export async function validateScrape(stockDetails) {
     // verify the scrape thrice
     for (var i = 0; i < 3; i++) {
 
-        console.log('i');
-        console.log(i);
-        
         if (stockDetails.scrapeCount < 5) {
 
-            console.log("Inside if");
-            
             let { stocks, numberOfPagesScraped } = await collectStockInformation(page);
 
             // emptying the array to avoid duplication
@@ -199,7 +194,6 @@ export async function validateScrape(stockDetails) {
             stockDetails.stocks.push(stocks);
             stockDetails.scrapeCount = await numberOfPagesScraped;
         } else {
-            console.log("Inside else");
             break;
         }
     }
