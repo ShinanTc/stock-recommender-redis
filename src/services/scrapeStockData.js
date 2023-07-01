@@ -1,10 +1,9 @@
 import puppeteer from 'puppeteer';
-import { collectStockInformation } from '../helpers/scrape/scrapeStockDataHelpers.js';
+import { collectStockInformation, validateScrape } from '../helpers/scrape/scrapeStockDataHelpers.js';
 
 // go to the website
 export async function scrapeStockData() {
     try {
-        // const browser = await puppeteer.launch({ headless: false });
         const browser = await puppeteer.launch({ headless: 'new' });
 
         // getting the first tab
@@ -33,6 +32,11 @@ export async function scrapeStockData() {
                     stockDetails.stocks.push(stocks);
                     stockDetails.scrapeCount = await numberOfPagesScraped;
 
+                    console.log('stockDetails.scrapeCount');
+                    console.log(stockDetails.scrapeCount);
+
+                    stockDetails = await validateScrape(stockDetails);
+
                     resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
                 } catch (error) {
 
@@ -46,6 +50,11 @@ export async function scrapeStockData() {
 
                         stockDetails.stocks.push(stocks);
                         stockDetails.scrapeCount = await numberOfPagesScraped;
+
+                        console.log('stockDetails.scrapeCount');
+                        console.log(stockDetails.scrapeCount);
+
+                        stockDetails = await validateScrape(stockDetails);
 
                         await browser.close();
 
