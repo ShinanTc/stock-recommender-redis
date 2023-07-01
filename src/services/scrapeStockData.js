@@ -33,7 +33,7 @@ export async function scrapeStockData() {
                     stockDetails.stocks.push(stocks);
                     stockDetails.scrapeCount = await numberOfPagesScraped;
 
-                    resolve(stockDetails.stocks); // Resolve the promise with the stocks array
+                    resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
                 } catch (error) {
 
                     // error message when the pop up did not appear
@@ -49,7 +49,7 @@ export async function scrapeStockData() {
 
                         await browser.close();
 
-                        resolve(stockDetails.stocks);  // Resolve the promise with the stocks array
+                        resolve(stockDetails.stocks[0]);  // Resolve the promise with the stocks array
                     } else {
                         await browser.close();
                         reject(error); // Reject the promise if an error occurs

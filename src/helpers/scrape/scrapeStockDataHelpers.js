@@ -79,8 +79,11 @@ export async function collectStockInformation(page) {
     // gathered stocks
     let stocks = [];
 
+    let numberOfPagesScraped = 1;
+
     // counting number of stocks in the current page
-    let numberOfPagesScraped = 0;
+    let numberOfStocksInCurrentPage = 1;
+
     let i = 1; // Start with the initial value for `i`
     let reachedPageBeforeLastPage = false;
 
@@ -99,6 +102,10 @@ export async function collectStockInformation(page) {
         // going throught the stock data in each page
         while (true) {
             console.log('Page No:' + numberOfPagesScraped);
+
+            // i === 1 means it is the first stock of the page
+            if (i === 1)
+                numberOfStocksInCurrentPage = 1;
 
             let xPaths = [
                 // stockTickerNameXpath
@@ -123,8 +130,10 @@ export async function collectStockInformation(page) {
             let stockDetails = undefined;
 
             // Extract the stock details if element is not TimeoutError
-            if (element !== "TimeoutError")
+            if (element !== "TimeoutError") {
                 stockDetails = await getStockDetails(page, element);
+                numberOfStocksInCurrentPage++;
+            }
 
             // Add the stock details to the stocks array
             if (stockDetails !== undefined)
@@ -136,13 +145,17 @@ export async function collectStockInformation(page) {
 
                 numberOfPagesScraped++;
 
+                // if there is less than 5 stocks in a page then it is the last page
+                if (numberOfStocksInCurrentPage < 10)
+                    reachedPageBeforeLastPage = true;
+
                 let returnValue = await clickNext(page, 'body > app-root > div > app-stock-view-details > div > div > div.col-lg-8 > div > div > div.row.stock-table-MT.ng-star-inserted > div > div > app-pagination > div > ngb-pagination > ul > li:nth-child(8) > a');
 
                 i = 1;
 
                 // If clickNext times out, it could be due to a network issue or reaching the page before the last page.
                 // To handle this, we change the selector for the next button on the last page.
-                if (returnValue === 'TimeoutError') {
+                if (reachedPageBeforeLastPage || returnValue === 'TimeoutError') {
 
                     // When we reach the page before the last page, the selector of the Next button changes.
                     // To handle this, we call the clickNext function again with a different selector.
