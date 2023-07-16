@@ -1,69 +1,75 @@
-import puppeteer from 'puppeteer';
-import { collectStockInformation, validateScrape } from '../helpers/scrape/scrapeStockDataHelpers.js';
+import puppeteer from "puppeteer";
+import {
+  collectStockInformation,
+  validateScrape,
+} from "../helpers/scrape/scrapeStockDataHelpers.js";
 
 // go to the website
 export async function scrapeStockData() {
-    try {
-        const browser = await puppeteer.launch({ headless: 'new' });
+  try {
+    // const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
 
-        // getting the first tab
-        const page = (await browser.pages())[0];
+    // getting the first tab
+    const page = (await browser.pages())[0];
 
-        await page.goto('https://www.indiainfoline.com/stock-ideas/');
+    await page.goto("https://www.indiainfoline.com/stock-ideas/");
 
-        let stockDetails = {
-            stocks: [],
-            scrapeCount: 1
-        };
+    let stockDetails = {
+      stocks: [],
+      scrapeCount: 1,
+    };
 
-        // Wrap the scraping process in a promise
-        const stocksPromise = new Promise(async (resolve, reject) => {
-            setTimeout(async () => {
+    // Wrap the scraping process in a promise
+    const stocksPromise = new Promise(async (resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          // close the popup button
+          const popupCloseBtnXpath =
+            "/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img";
+          const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
+          popupCloseBtn.click();
 
-                try {
+          var { stocks, numberOfPagesScraped } = await collectStockInformation(
+            page
+          );
 
-                    // close the popup button
-                    const popupCloseBtnXpath = '/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img';
-                    const popupCloseBtn = await page.waitForXPath(popupCloseBtnXpath);
-                    popupCloseBtn.click();
+          stockDetails.stocks.push(stocks);
+          stockDetails.scrapeCount = await numberOfPagesScraped;
 
-                    var { stocks, numberOfPagesScraped } = await collectStockInformation(page);
+          stockDetails = await validateScrape(stockDetails);
 
-                    stockDetails.stocks.push(stocks);
-                    stockDetails.scrapeCount = await numberOfPagesScraped;
+          resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
+        } catch (error) {
+          // error message when the pop up did not appear
+          let errorMsg =
+            "Waiting for selector `/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img` failed: Waiting failed: 30000ms exceeded";
 
-                    stockDetails = await validateScrape(stockDetails);
+          // if it is a timeout error (that pop up didn't appear)
+          if (error.name === "TimeoutError" && error.message === errorMsg) {
+            var { stocks, numberOfPagesScraped } =
+              await collectStockInformation(page);
 
-                    resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
-                } catch (error) {
+            stockDetails.stocks.push(stocks);
+            stockDetails.scrapeCount = await numberOfPagesScraped;
 
-                    // error message when the pop up did not appear
-                    let errorMsg = 'Waiting for selector `/html/body/app-root/app-new-lead-grid-form/div[1]/div/button/img` failed: Waiting failed: 30000ms exceeded';
+            stockDetails = await validateScrape(stockDetails);
 
-                    // if it is a timeout error (that pop up didn't appear)
-                    if (error.name === "TimeoutError" && error.message === errorMsg) {
+            await browser.close();
 
-                        var { stocks, numberOfPagesScraped } = await collectStockInformation(page);
+            resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
+          } else {
+            await browser.close();
+            reject(error); // Reject the promise if an error occurs
+          }
+        }
+      }, 12000); // Set the timeout duration for the scraping process
+    });
 
-                        stockDetails.stocks.push(stocks);
-                        stockDetails.scrapeCount = await numberOfPagesScraped;
-
-                        stockDetails = await validateScrape(stockDetails);
-
-                        await browser.close();
-
-                        resolve(stockDetails.stocks[0]);  // Resolve the promise with the stocks array
-                    } else {
-                        await browser.close();
-                        reject(error); // Reject the promise if an error occurs
-                    }
-
-                }
-            }, 12000); // Set the timeout duration for the scraping process
-        });
-
-        return stocksPromise; // Return the promise for awaiting the stocks data
-    } catch (error) {
-        throw error; // Throw any error that occurs during the process
-    }
+    return stocksPromise; // Return the promise for awaiting the stocks data
+  } catch (error) {
+    throw error; // Throw any error that occurs during the process
+  }
 }
+
+scrapeStockData();
