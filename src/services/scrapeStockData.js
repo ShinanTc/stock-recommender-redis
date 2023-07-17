@@ -13,7 +13,7 @@ export async function scrapeStockData() {
     // getting the first tab
     const page = (await browser.pages())[0];
 
-    await page.goto("https://www.indiainfoline.com/stock-ideas/18");
+    await page.goto("https://www.indiainfoline.com/stock-ideas/");
 
     let stockDetails = {
       stocks: [],
