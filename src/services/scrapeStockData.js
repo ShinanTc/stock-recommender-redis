@@ -13,7 +13,7 @@ export async function scrapeStockData() {
     // getting the first tab
     const page = (await browser.pages())[0];
 
-    await page.goto("https://www.indiainfoline.com/stock-ideas/");
+    await page.goto("https://www.indiainfoline.com/stock-ideas/18");
 
     let stockDetails = {
       stocks: [],
@@ -37,7 +37,7 @@ export async function scrapeStockData() {
           stockDetails.stocks.push(stocks);
           stockDetails.scrapeCount = await numberOfPagesScraped;
 
-          stockDetails = await validateScrape(stockDetails);
+          stockDetails = await validateScrape(page, stockDetails);
 
           resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
         } catch (error) {
@@ -53,7 +53,7 @@ export async function scrapeStockData() {
             stockDetails.stocks.push(stocks);
             stockDetails.scrapeCount = await numberOfPagesScraped;
 
-            stockDetails = await validateScrape(stockDetails);
+            stockDetails = await validateScrape(page, stockDetails);
 
             await browser.close();
 
@@ -71,5 +71,3 @@ export async function scrapeStockData() {
     throw error; // Throw any error that occurs during the process
   }
 }
-
-scrapeStockData();

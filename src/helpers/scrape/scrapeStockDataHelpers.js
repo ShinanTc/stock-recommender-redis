@@ -123,7 +123,7 @@ export async function collectStockInformation(page) {
         numberOfPagesScraped++;
 
         // if there is less than 5 stocks in a page then it is the last page
-        if (numberOfStocksInCurrentPage < 10) reachedPageBeforeLastPage = true;
+        if (numberOfStocksInCurrentPage < 6) reachedPageBeforeLastPage = true;
 
         let returnValue = await clickNext(
           page,
@@ -144,6 +144,7 @@ export async function collectStockInformation(page) {
 
           // If this returns a 'TimeoutError', it indicates that we have reached the last page
           if (reachedPageBeforeLastPage || nextPage === "TimeoutError") {
+            console.log("Inside if");
             break;
           } else {
             reachedPageBeforeLastPage = true;
@@ -159,7 +160,7 @@ export async function collectStockInformation(page) {
 }
 
 // for validating whether the scrape was accurate or not
-export async function validateScrape(stockDetails) {
+export async function validateScrape(page, stockDetails) {
   // verify the scrape thrice
   for (var i = 0; i < 3; i++) {
     if (stockDetails.scrapeCount < 5) {
