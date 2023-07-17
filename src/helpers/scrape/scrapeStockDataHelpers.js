@@ -144,7 +144,6 @@ export async function collectStockInformation(page) {
 
           // If this returns a 'TimeoutError', it indicates that we have reached the last page
           if (reachedPageBeforeLastPage || nextPage === "TimeoutError") {
-            console.log("Inside if");
             break;
           } else {
             reachedPageBeforeLastPage = true;

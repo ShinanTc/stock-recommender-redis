@@ -44,7 +44,6 @@ export async function getHighestProfitableTrades(stockData) {
             };
         })
         .sort((a, b) => b.value - a.value)
-        .slice(0, 20)
         .map(item => item.string);
 
     return sortedData;

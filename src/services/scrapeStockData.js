@@ -39,6 +39,8 @@ export async function scrapeStockData() {
 
           stockDetails = await validateScrape(page, stockDetails);
 
+          await browser.close();
+
           resolve(stockDetails.stocks[0]); // Resolve the promise with the stocks array
         } catch (error) {
           // error message when the pop up did not appear
