@@ -1,15 +1,17 @@
-import express from 'express';
-import { createStockData } from '../../helpers/db/redis-db-helper.js';
+import express from "express";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// TEST ROUTES
-router.get('/', (req, res) => {
-    console.log("Inside / route");
-});
+router.get("/", (req, res) => {
+  // Specify the path to your HTML file
+  const filePath = path.join(__dirname, "../../../public/index.html");
 
-router.post('/', (req, res) => {
-    createStockData();
+  // Send the file as the response
+  res.sendFile(filePath);
 });
 
 export default router;
