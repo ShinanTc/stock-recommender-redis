@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View stocks</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
 </head>
-
 <body>
-    <p>{{stockArray}}</p>
-</body>
+    <table>
+        <tr>
+            <th>STOCK NAME</th>
+            <th>LTP</th>
+            <th>TARGET</th>
+            <th>PROFIT</th>
+        </tr>
+        {{stocksData}}
+    </table>
 
+    <a href="/" style="text-decoration: none;"><button>GO BACK TO HOME PAGE</button></a>
+</body>
 </html>
