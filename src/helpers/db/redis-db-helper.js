@@ -41,3 +41,30 @@ export async function createStockData() {
     throw error;
   }
 }
+
+// get all stock keys
+export async function getAllStockKeys() {
+  const redisClient = await getClient();
+
+  try {
+    const stockKeys = await redisClient.keys("*");
+    return stockKeys;
+  } catch (err) {
+    console.error("Failed to get stock data");
+    throw err;
+  }
+}
+
+// get all stock values
+export async function getAllStockValues() {
+  const redisClient = await getClient();
+  const stockKeys = await getAllStockKeys();
+  const stockValues = [];
+
+  for (var key of stockKeys) {
+    var stockValue = await redisClient.get(`${key}`);
+    stockValues.push(stockValue);
+  }
+
+  return stockValues;
+}

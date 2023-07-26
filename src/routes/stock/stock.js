@@ -1,7 +1,11 @@
 import express from "express";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
-import { sendArrayDataToClient } from "../../handlers/responseHandler.js";
+import { sendDataToClient } from "../../handlers/responseHandler.js";
+import { getHighestProfitableTrades } from "../../helpers/processScrapedData.js";
+import {
+  getAllStockValues,
+} from "../../helpers/db/redis-db-helper.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -16,13 +20,18 @@ router.get("/", (req, res) => {
 });
 
 router.get("/get-stocks", async (req, res) => {
-  const budget = req.query.budget;
-  // Process the budget value as needed
-  console.log("Budget:", budget);
-  // ... Perform other operations with the budget value
+  const filePath = path.join(__dirname, "../../../public/view-stocks.html");
 
-  // Send response back to the client
-  res.send("Budget received");
+  try {
+    // const stocks = await getHighestProfitableTrades(req.query.budget);
+
+    let stocks = await getAllStockValues();
+
+    sendDataToClient(res, filePath, "stocksData", stocks);
+  } catch (error) {
+    console.error("Error fetching stocks:", error);
+    return res.status(500).send("Server error");
+  }
 });
 
 export default router;
