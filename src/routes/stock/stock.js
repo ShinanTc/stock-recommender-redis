@@ -27,7 +27,7 @@ router.get("/get-stocks", async (req, res) => {
     let stocks = await getAllStockValues();
 
     stocks = removeUnaffordableStocks(stocks, req.query.budget);
-    // stocks = await getHighestProfitableTrades(req.query.budget, stocks);
+    stocks = await getHighestProfitableTrades(stocks);
 
     sendDataToClient(res, filePath, "stocksData", stocks);
   } catch (error) {

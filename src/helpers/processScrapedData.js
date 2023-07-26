@@ -32,19 +32,18 @@ export async function removeNonProfitableTrades(stockData) {
 }
 
 // for getting the highest profitable trades from the scraped trades
-export async function getHighestProfitableTrades(userBudget, stockData) {
-  // let sortedData = stockData
-  //   .map((data) => {
-  //     let target = data.split("|")[3];
-  //     return {
-  //       string: data,
-  //       value: parseInt(target),
-  //     };
-  //   })
-  //   .sort((a, b) => b.value - a.value)
-  //   .map((item) => item.string);
-  // return sortedData;
-
+export async function getHighestProfitableTrades(stockData) {
+  let sortedData = stockData
+    .map((data) => {
+      let target = data.split("|")[3];
+      return {
+        string: data,
+        value: parseInt(target),
+      };
+    })
+    .sort((a, b) => b.value - a.value)
+    .map((item) => item.string);
+  return sortedData;
 }
 
 // turn the retrieved stockData into (key,value) format so that we can store it on redis
