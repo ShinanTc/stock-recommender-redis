@@ -13,6 +13,9 @@ export async function createStockData() {
     // getting the created redis client
     let redisClient = await getClient();
 
+    // delete all stock values
+    await redisClient.flushDb();
+
     let stockData = await scrapeStockData();
 
     // removing NaN values
@@ -71,3 +74,5 @@ export async function getAllStockValues() {
 
   return stockValues;
 }
+
+createStockData();
