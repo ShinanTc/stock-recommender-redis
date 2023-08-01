@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
 import { createClient } from 'redis';
-
-dotenv.config();
 
 let client = null;
 
