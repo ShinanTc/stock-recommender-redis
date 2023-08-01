@@ -37,6 +37,9 @@ export async function createStockData() {
           console.error("Failed to store data in Redis", error)
         );
     }
+
+    // close redis connection
+    await redisClient.quit();
   } catch (error) {
     throw error;
   }
