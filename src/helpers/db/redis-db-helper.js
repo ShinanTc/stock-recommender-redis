@@ -74,5 +74,3 @@ export async function getAllStockValues() {
 
   return stockValues;
 }
-
-createStockData();
