@@ -6,7 +6,12 @@ export function getClient() {
 
     if (!client) {
 
-        client = createClient();
+         client = redis.createClient({
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            password: process.env.REDIS_PASSWORD
+        });
+        
 
         // on error event
         client.on('error', err => {
