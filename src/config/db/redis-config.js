@@ -6,7 +6,7 @@ export function getClient() {
 
     if (!client) {
 
-         client = redis.createClient({
+         client = createClient({
             host: process.env.REDIS_HOST,
             port: process.env.REDIS_PORT,
             password: process.env.REDIS_PASSWORD
