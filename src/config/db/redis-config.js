@@ -13,9 +13,6 @@ export function getClient() {
       password: process.env.REDIS_PASSWORD,
     });
 
-    console.log("client");
-    console.log(client);
-
     // on error event
     client.on("error", (err) => {
       console.error("Redis Client Error", err);
