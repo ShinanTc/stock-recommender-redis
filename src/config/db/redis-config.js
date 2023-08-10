@@ -10,12 +10,9 @@ export function getClient() {
     client = createClient({
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
-      password: process.env.REDIS_PASSWORD,
+      password: process.env.REDIS_PASSWORD
     });
 
-    console.log('client');
-    console.log(client);
-    
     // on error event
     client.on("error", (err) => {
       console.error("Redis Client Error", err);
