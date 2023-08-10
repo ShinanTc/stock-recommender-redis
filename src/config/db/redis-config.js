@@ -6,6 +6,16 @@ dotenv.config();
 let client = null;
 
 export function getClient() {
+
+  console.log('REDIS_HOST');
+  console.log(process.env.REDIS_HOST);
+
+  console.log('REDIS_PORT');
+  console.log(process.env.REDIS_PORT);
+
+  console.log('REDIS_PASSWORD');
+  console.log(process.env.REDIS_PASSWORD);
+
   if (!client) {
     client = createClient({
       host: process.env.REDIS_HOST,
