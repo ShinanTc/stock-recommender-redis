@@ -15,10 +15,10 @@ export function getClient() {
     });
 
     // on error event
-    // client.on("error", (err) => {
-    //   console.error("Redis Client Error", err);
-    //   throw err;
-    // });
+    client.on("error", (err) => {
+      console.error("Redis Client Error", err);
+      throw err;
+    });
 
     // connect to redis
     client.connect((err) => {
