@@ -4,7 +4,7 @@ import {
   removeNaNvalues,
   removeNonProfitableTrades,
   getHighestProfitableTrades,
-  turnIntoKeyValueFormat,
+  turnIntoKeyValueFormat
 } from "../processScrapedData.js";
 
 // create stock data
