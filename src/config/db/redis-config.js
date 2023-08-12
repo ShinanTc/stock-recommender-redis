@@ -7,6 +7,13 @@ let client = null;
 
 export function getClient() {
   if (!client) {
+
+    console.log('Creating Redis client with config:', {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+      password: process.env.REDIS_PASSWORD
+    });
+    
     client = createClient({
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
