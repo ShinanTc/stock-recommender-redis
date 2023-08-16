@@ -62,9 +62,7 @@ export async function getAllStockKeys() {
 
   try {
 
-    console.log("Right before getting stockKeys");
-    
-    const stockKeys = await redisClient.keys("*");
+    const stockKeys = await redisClient.hkeys("*");
 
     console.log('stockKeys');
     console.log(stockKeys);
