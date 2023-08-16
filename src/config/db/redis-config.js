@@ -9,8 +9,6 @@ let client = null;
 export async function getClient() {
   if (!client) {
 
-    console.log("Inside getClient");
-
     // development
     // client = createClient({
     //   host: process.env.REDIS_HOST,
@@ -32,14 +30,12 @@ export async function getClient() {
       token: process.env.KV_REST_API_TOKEN
     });
 
-    console.log("client created");
+    console.log('client');
+    console.log(client);
 
     await kv.set('TATAPOWER','13123123123123');
     const getExample = await kv.get('TATAPOWER');
   
-    console.log('getExample');
-    console.log(getExample);
-    
     // on error event
     // client.on("error", (err) => {
     //   console.error("Redis Client Error", err);
