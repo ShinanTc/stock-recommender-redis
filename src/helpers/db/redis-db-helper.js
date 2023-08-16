@@ -4,8 +4,12 @@ import {
   removeNaNvalues,
   removeNonProfitableTrades,
   getHighestProfitableTrades,
-  turnIntoKeyValueFormat
+  turnIntoKeyValueFormat,
 } from "../processScrapedData.js";
+import { createClient, kv } from "@vercel/kv";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // create stock data
 export async function createStockData() {
@@ -50,10 +54,18 @@ export async function createStockData() {
 
 // get all stock keys
 export async function getAllStockKeys() {
-  const redisClient = await getClient();
+  
+  const redisClient = createClient({
+    url: process.env.KV_URL,
+    token: process.env.KV_REST_API_TOKEN
+  });
 
   try {
     const stockKeys = await redisClient.keys("*");
+
+    console.log('stockKeys');
+    console.log(stockKeys);
+    
     return stockKeys;
   } catch (err) {
     console.error("Failed to get stock data");
@@ -63,10 +75,10 @@ export async function getAllStockKeys() {
 
 // get all stock values
 export async function getAllStockValues() {
-  const redisClient = await getClient();
-  console.log('redisClient');
-  console.log(redisClient);
-  // const stockKeys = await getAllStockKeys();
+  // const redisClient = await getClient();
+  // const redisClient = createClient();
+
+  const stockKeys = await getAllStockKeys();
   // const stockValues = [];
 
   // for (var key of stockKeys) {
