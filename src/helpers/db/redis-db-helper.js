@@ -60,7 +60,7 @@ export async function getAllStockKeys() {
   });
 
   try {
-    const stockKeys = await redisClient.hkeys("*");
+    const stockKeys = await kv.hkeys("*");
 
     console.log("stockKeys");
     console.log(stockKeys);
