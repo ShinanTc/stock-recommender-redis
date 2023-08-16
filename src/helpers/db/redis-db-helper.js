@@ -54,6 +54,8 @@ export async function createStockData() {
 
 // get all stock keys
 export async function getAllStockKeys() {
+
+  console.log('Inside getAllStockKeys');
   
   const redisClient = createClient({
     url: process.env.KV_URL,

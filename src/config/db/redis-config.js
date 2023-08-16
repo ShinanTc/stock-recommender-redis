@@ -30,8 +30,8 @@ export async function getClient() {
       token: process.env.KV_REST_API_TOKEN
     });
 
-    await kv.set('TATAPOWER','13123123123123');
-    const getExample = await kv.get('TATAPOWER');
+    // await kv.set('TATAPOWER','13123123123123');
+    // const getExample = await kv.get('TATAPOWER');
   
     // on error event
     // client.on("error", (err) => {
