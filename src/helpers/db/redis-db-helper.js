@@ -64,6 +64,8 @@ export async function getAllStockKeys() {
 // get all stock values
 export async function getAllStockValues() {
   const redisClient = await getClient();
+  console.log('redisClient');
+  console.log(redisClient);
   // const stockKeys = await getAllStockKeys();
   // const stockValues = [];
 

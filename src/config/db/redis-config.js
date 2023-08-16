@@ -30,9 +30,6 @@ export async function getClient() {
       token: process.env.KV_REST_API_TOKEN
     });
 
-    console.log('client');
-    console.log(client);
-
     await kv.set('TATAPOWER','13123123123123');
     const getExample = await kv.get('TATAPOWER');
   
