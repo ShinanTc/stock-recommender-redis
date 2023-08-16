@@ -60,14 +60,13 @@ export async function getAllStockKeys() {
   });
 
   try {
+    await kv.hset("stocks", "TATAPOWER", "13123123123123");
+    const getExample = await kv.hget("stocks", "TATAPOWER");
 
-    await kv.hset('TATAPOWER','13123123123123');
-    const getExample = await kv.get('TATAPOWER');
-
-    console.log('getExample');
+    console.log("getExample");
     console.log(getExample);
-    
-    const stockKeys = await kv.hkeys();
+
+    const stockKeys = await kv.hkeys("stocks");
 
     console.log("stockKeys");
     console.log(stockKeys);
