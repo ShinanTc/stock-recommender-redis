@@ -30,6 +30,11 @@ export function getClient() {
       token: process.env.KV_REST_API_TOKEN
     });
   
+    console.log('KV_URL');
+    console.log(process.env.KV_URL);
+
+    console.log('KV_REST_API_TOKEN');
+    console.log(process.env.KV_REST_API_TOKEN);
 
     // on error event
     client.on("error", (err) => {
