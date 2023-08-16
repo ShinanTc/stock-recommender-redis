@@ -62,6 +62,10 @@ export async function getAllStockKeys() {
   try {
 
     await kv.set('TATAPOWER','13123123123123');
+    const getExample = await kv.get('TATAPOWER');
+
+    console.log('getExample');
+    console.log(getExample);
     
     const stockKeys = await kv.hkeys("*");
 
