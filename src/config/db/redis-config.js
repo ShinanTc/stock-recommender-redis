@@ -9,6 +9,8 @@ let client = null;
 export async function getClient() {
   if (!client) {
 
+    console.log("Inside getClient");
+
     // development
     // client = createClient({
     //   host: process.env.REDIS_HOST,
@@ -29,6 +31,8 @@ export async function getClient() {
       url: process.env.KV_URL,
       token: process.env.KV_REST_API_TOKEN
     });
+
+    console.log("client created");
 
     await kv.set('TATAPOWER','13123123123123');
     const getExample = await kv.get('TATAPOWER');

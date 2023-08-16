@@ -64,13 +64,13 @@ export async function getAllStockKeys() {
 // get all stock values
 export async function getAllStockValues() {
   const redisClient = await getClient();
-  const stockKeys = await getAllStockKeys();
-  const stockValues = [];
+  // const stockKeys = await getAllStockKeys();
+  // const stockValues = [];
 
-  for (var key of stockKeys) {
-    var stockValue = await redisClient.get(`${key}`);
-    stockValues.push(stockValue);
-  }
+  // for (var key of stockKeys) {
+  //   var stockValue = await redisClient.get(`${key}`);
+  //   stockValues.push(stockValue);
+  // }
 
-  return stockValues;
+  // return stockValues;
 }

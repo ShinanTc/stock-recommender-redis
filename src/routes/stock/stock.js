@@ -26,10 +26,10 @@ router.get("/get-stocks", async (req, res) => {
   try {
     let stocks = await getAllStockValues();
 
-    stocks = removeUnaffordableStocks(stocks, req.query.budget);
-    stocks = await getHighestProfitableTrades(stocks);
+    // stocks = removeUnaffordableStocks(stocks, req.query.budget);
+    // stocks = await getHighestProfitableTrades(stocks);
 
-    sendDataToClient(res, filePath, "stocksData", stocks);
+    // sendDataToClient(res, filePath, "stocksData", stocks);
   } catch (error) {
     console.error("Error fetching stocks:", error);
     return res.status(500).send("Server error");
