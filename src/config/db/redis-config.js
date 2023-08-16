@@ -1,12 +1,12 @@
 // import { createClient } from "redis";
-import { createClient } from '@vercel/kv';
+import { createClient, kv } from '@vercel/kv';
 import dotenv from "dotenv";
 
 dotenv.config();
 
 let client = null;
 
-export function getClient() {
+export async function getClient() {
   if (!client) {
 
     // development
@@ -29,33 +29,34 @@ export function getClient() {
       url: process.env.KV_URL,
       token: process.env.KV_REST_API_TOKEN
     });
+
+    await kv.set('TATAPOWER','13123123123123');
+    const getExample = await kv.get('TATAPOWER');
   
-    console.log('KV_URL');
-    console.log(process.env.KV_URL);
-
-    console.log('KV_REST_API_TOKEN');
-    console.log(process.env.KV_REST_API_TOKEN);
-
+    console.log('getExample');
+    console.log(getExample);
+    
     // on error event
-    client.on("error", (err) => {
-      console.error("Redis Client Error", err);
-      throw err;
-    });
+    // client.on("error", (err) => {
+    //   console.error("Redis Client Error", err);
+    //   throw err;
+    // });
 
-    // connect to redis
-    client.connect((err) => {
-      if (err) {
-        console.error("Failed to connect to Redis", err);
-        throw err;
-      } else {
-        console.log("Redis connection succesfull!!!");
-        throw err;
-      }
-    });
+    // // connect to redis
+    // client.connect((err) => {
+    //   if (err) {
+    //     console.error("Failed to connect to Redis", err);
+    //     throw err;
+    //   } else {
+    //     console.log("Redis connection succesfull!!!");
+    //     throw err;
+    //   }
+    // });
 
-    client.on("connect", () => {
-      console.log("Redis connection Established");
-    });
+    // client.on("connect", () => {
+    //   console.log("Redis connection Established");
+    // });
+
   }
 
   return client;
