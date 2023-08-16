@@ -54,18 +54,18 @@ export async function createStockData() {
 
 // get all stock keys
 export async function getAllStockKeys() {
-
   const redisClient = createClient({
     url: process.env.KV_URL,
-    token: process.env.KV_REST_API_TOKEN
+    token: process.env.KV_REST_API_TOKEN,
   });
 
   try {
-
     const stockKeys = await redisClient.hkeys("*");
 
-    console.log('stockKeys');
+    console.log("stockKeys");
     console.log(stockKeys);
+
+    throw "Something went wrong";
 
     return stockKeys;
   } catch (err) {
