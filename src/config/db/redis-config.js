@@ -1,5 +1,4 @@
-// import { createClient } from "redis";
-import { createClient } from '@vercel/kv';
+import { createClient } from "redis";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -9,27 +8,17 @@ let client = null;
 export function getClient() {
   if (!client) {
 
-    // development
-    // client = createClient({
-    //   host: process.env.REDIS_HOST,
-    //   port: process.env.REDIS_PORT,
-    //   password: process.env.REDIS_PASSWORD
-    // });
-    
-    // earlier production
-    // client = createClient({
-    //   host: process.env.process.env.KV_URL,
-    //   // port: process.env.REDIS_PORT,
-    //   port: 6379,  // default redis port
-    //   password: process.env.KV_REST_API_TOKEN
-    // });
-
-    // current production
-    client = createClient({
-      url: process.env.KV_URL,
-      token: process.env.KV_REST_API_TOKEN
+    console.log('Creating Redis client with config:', {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+      password: process.env.REDIS_PASSWORD
     });
-  
+    
+    client = createClient({
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+      password: process.env.REDIS_PASSWORD
+    });
 
     // on error event
     client.on("error", (err) => {
