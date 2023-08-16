@@ -67,7 +67,7 @@ export async function getAllStockKeys() {
 
     console.log('stockKeys');
     console.log(stockKeys);
-    
+
     return stockKeys;
   } catch (err) {
     console.error("Failed to get stock data");
