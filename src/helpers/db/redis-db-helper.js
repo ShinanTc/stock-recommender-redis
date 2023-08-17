@@ -15,7 +15,10 @@ dotenv.config();
 export async function createStockData() {
   try {
     // getting the created redis client
-    let redisClient = await getClient();
+    let redisClient = createClient({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
 
     // delete all stock values
     await redisClient.flushDb();
