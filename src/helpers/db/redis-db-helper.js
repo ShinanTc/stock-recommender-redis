@@ -82,12 +82,10 @@ export async function getAllStockValues() {
 
   // iterate though stockKeys and get each value
   for (var key of stockKeys) {
-
-    if(key !== 'stocks'){
+    if (key !== "stocks") {
       var stockValue = await redisClient.get(`${key}`);
       stockValues.push(stockValue);
     }
-    
   }
 
   return stockValues;

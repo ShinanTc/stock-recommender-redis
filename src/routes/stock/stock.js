@@ -25,7 +25,6 @@ router.get("/get-stocks", async (req, res) => {
 
   try {
     let stocks = await getAllStockValues();
-
     stocks = removeUnaffordableStocks(stocks, req.query.budget);
     stocks = await getHighestProfitableTrades(stocks);
 
