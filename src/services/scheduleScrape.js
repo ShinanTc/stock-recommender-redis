@@ -5,7 +5,7 @@ export const scheduleCronJob = async () => {
   console.log("scheduling cron job");
 
   // Schedule the cron job to run at 11:55 am every day in the 'Asia/Kolkata' time zone
-  cron.schedule("55 11 * * *", createStockData, {
+  cron.schedule("25 12 * * *", createStockData, {
     timezone: "Asia/Kolkata",
   });
 };
