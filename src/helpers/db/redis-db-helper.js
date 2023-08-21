@@ -26,6 +26,8 @@ export async function createStockData() {
     // delete all stock values
     await redisClient.flushdb();
 
+    console.log("DATABASE cleared");
+
     let stockData = await scrapeStockData();
 
     // removing NaN values

@@ -3,7 +3,7 @@ import { startServer } from "./src/config/server/server-config.js";
 import middlewares from "./src/middlewares/utils/middlewares.js";
 import routeIndex from "./src/routes/routeIndex.js";
 import dotenv from "dotenv";
-// import { getClient } from "./src/config/db/redis-config.js";
+import { createStockData } from "./src/helpers/db/redis-db-helper.js"; // Assuming you have a separate file for createStockData.
 import { scheduleCronJob } from "./src/services/scheduleScrape.js";
 
 const app = express();
@@ -20,7 +20,12 @@ app.use(middlewares);
 // entry to all routes
 app.use("/", routeIndex);
 
-scheduleCronJob();
-
-// for listening
+// Start the server
 startServer(app);
+
+(async () => {
+  await scheduleCronJob(); // Wait for the cron job to complete
+
+  // Call your other function after the cron job has completed
+  await createStockData();
+})();
