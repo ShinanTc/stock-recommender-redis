@@ -4,7 +4,7 @@ export const scheduleCronJob = () => {
   return new Promise((resolve) => {
     console.log("scheduling cron job");
 
-    cron.schedule("51 20 * * *", () => {
+    cron.schedule("0 10 * * *", () => {
       console.log("IT'S 10 AM");
       resolve(); // Resolve the promise when the cron job is executed.
     }, {
