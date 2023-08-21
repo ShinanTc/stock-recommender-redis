@@ -24,7 +24,7 @@ export async function createStockData() {
     });
 
     // delete all stock values
-    await redisClient.flushDb();
+    await redisClient.flushdb();
 
     let stockData = await scrapeStockData();
 
