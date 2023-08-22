@@ -1,4 +1,3 @@
-import { getClient } from "../../config/db/redis-config.js";
 import { scrapeStockData } from "../../services/scrapeStockData.js";
 import {
   removeNaNvalues,
