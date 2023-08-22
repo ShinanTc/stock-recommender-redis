@@ -35,4 +35,9 @@ router.get("/get-stocks", async (req, res) => {
   }
 });
 
+router.get("/api/cron", async (req, res) => {
+  console.log("Cron job is working");
+  res.send("Cron job is working");
+});
+
 export default router;
