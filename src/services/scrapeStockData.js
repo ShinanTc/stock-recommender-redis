@@ -1,17 +1,22 @@
 import puppeteer from "puppeteer";
+import cron from "node-cron";
+
 import {
   collectStockInformation,
   validateScrape,
 } from "../helpers/scrape/scrapeStockDataHelpers.js";
 
-// go to the website
+// for scraping the stock data
 export async function scrapeStockData() {
   try {
+    
+    // open the browser
     const browser = await puppeteer.launch({ headless: "new" });
 
     // getting the first tab
     const page = (await browser.pages())[0];
 
+    // go to the website
     await page.goto("https://www.indiainfoline.com/stock-ideas/");
 
     let stockDetails = {
@@ -72,3 +77,21 @@ export async function scrapeStockData() {
     throw error; // Throw any error that occurs during the process
   }
 }
+
+// for scheduling the scrape
+export const scheduleCronJob = () => {
+  return new Promise((resolve) => {
+    console.log("scheduling cron job");
+
+    cron.schedule(
+      "22 12 * * *",
+      () => {
+        console.log("IT'S 10 AM");
+        resolve(); // Resolve the promise when the cron job is executed.
+      },
+      {
+        timezone: "Asia/Kolkata",
+      }
+    );
+  });
+};

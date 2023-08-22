@@ -4,7 +4,7 @@ import middlewares from "./src/middlewares/utils/middlewares.js";
 import routeIndex from "./src/routes/routeIndex.js";
 import dotenv from "dotenv";
 import { createStockData } from "./src/helpers/db/redis-db-helper.js"; // Assuming you have a separate file for createStockData.
-import { scheduleCronJob } from "./src/services/scheduleScrape.js";
+import { scheduleCronJob } from "./src/services/scrapeStockData.js";
 
 const app = express();
 
