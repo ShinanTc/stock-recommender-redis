@@ -5,7 +5,7 @@ import {
   removeNonProfitableTrades,
   getHighestProfitableTrades,
   turnIntoKeyValueFormat,
-} from "../processScrapedData.js";
+} from "../scrape/processScrapedData.js";
 import { createClient } from "@vercel/kv";
 import dotenv from "dotenv";
 

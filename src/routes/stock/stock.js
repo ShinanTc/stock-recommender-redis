@@ -5,7 +5,7 @@ import { sendDataToClient } from "../../handlers/responseHandler.js";
 import {
   getHighestProfitableTrades,
   removeUnaffordableStocks,
-} from "../../helpers/processScrapedData.js";
+} from "../../helpers/scrape/processScrapedData.js";
 import { getAllStockValues } from "../../helpers/db/redis-db-helper.js";
 
 const router = express.Router();
