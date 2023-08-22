@@ -5,7 +5,7 @@ export function watchVariable() {
 
   if (global.cronJobCompleted === true) {
     createStockData();
-    // Set ABC back to false after execution
+    // Set cronJobCompleted back to false after execution
     global.cronJobCompleted = false;
   }
 }
