@@ -9,7 +9,6 @@ import {
 // for scraping the stock data
 export async function scrapeStockData() {
   try {
-    
     // open the browser
     const browser = await puppeteer.launch({ headless: "new" });
 
@@ -87,6 +86,7 @@ export const scheduleCronJob = () => {
       "0 10 * * *",
       () => {
         console.log("IT'S 10 AM");
+        global.cronJobCompleted = true;
         resolve(); // Resolve the promise when the cron job is executed.
       },
       {
