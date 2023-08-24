@@ -59,6 +59,14 @@ export async function createStockData() {
 // get all stock values
 export async function getAllStockValues() {
   // create client
+
+
+  console.log('KV_REST_API_URL');
+  console.log(process.env.KV_REST_API_URL);
+
+  console.log('KV_REST_API_TOKEN');
+  console.log(process.env.KV_REST_API_TOKEN);
+  
   const redisClient = createClient({
     url: process.env.KV_REST_API_URL,
     token: process.env.KV_REST_API_TOKEN,
