@@ -17,10 +17,5 @@
         "path": "/api/cron",
         "schedule": "0 11 * * *"
       }
-    ],
-    "functions": {
-      "cron-function": {
-        "handler": "api/cron.js"
-      }
-    }
+    ]
   }
