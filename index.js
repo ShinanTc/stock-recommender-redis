@@ -23,4 +23,7 @@ app.use("/", routeIndex);
 // Start the server
 startServer(app);
 
-setInterval(() => createStockData(), 1200000);
+setInterval(() => {
+  console.log("Calling setInterval");
+  createStockData();
+}, 1200000);
