@@ -21,20 +21,34 @@ export async function createStockData() {
       token: process.env.KV_REST_API_TOKEN,
     });
 
+    console.log("Client created");
+
     // delete all stock values
     await redisClient.flushdb();
 
+    console.log("Database cleared");
+
     let stockData = await scrapeStockData();
+
+    console.log("stock scraping completed");
 
     // removing NaN values
     stockData = await removeNaNvalues(stockData);
 
+    console.log("removed Nan values");
+
     // removing trades on loss
     stockData = await removeNonProfitableTrades(stockData);
 
+    console.log("removed non profitable trades");
+
     stockData = await getHighestProfitableTrades(stockData);
 
+    console.log("gained highest profitable trades");
+
     stockData = await turnIntoKeyValueFormat(stockData);
+
+    console.log("turned into key value format");
 
     for (var data of stockData) {
       var key = data.key;

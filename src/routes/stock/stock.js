@@ -37,7 +37,7 @@ router.get("/get-stocks", async (req, res) => {
 });
 
 router.get("/api/cron", async (req, res) => {
-  createStockData();
+  await createStockData();
   res.send("Cron job is working");
 });
 
