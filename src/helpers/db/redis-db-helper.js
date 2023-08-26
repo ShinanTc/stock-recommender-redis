@@ -21,12 +21,8 @@ export async function createStockData() {
       token: process.env.KV_REST_API_TOKEN,
     });
 
-    console.log("Client created");
-
     // delete all stock values
     await redisClient.flushdb();
-
-    console.log("Database cleared");
 
     let stockData = await scrapeStockData();
 
