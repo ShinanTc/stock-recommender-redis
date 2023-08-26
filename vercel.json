@@ -12,13 +12,10 @@
       "dest": "/"
     }
   ],
-  "env": {
-    "TZ": "Asia/Kolkata"
-  },
   "crons": [
     {
       "path": "/api/cron",
-      "schedule": "0 10 * * *"
+      "schedule": "15 01 * * *"
     }
   ]
 }
