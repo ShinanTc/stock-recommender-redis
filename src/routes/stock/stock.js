@@ -7,6 +7,7 @@ import {
   removeUnaffordableStocks,
 } from "../../helpers/scrape/processScrapedData.js";
 import { getAllStockValues } from "../../helpers/db/redis-db-helper.js";
+import { createStockData } from "../../helpers/db/redis-db-helper.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -36,8 +37,13 @@ router.get("/get-stocks", async (req, res) => {
 });
 
 router.get("/api/cron", async (req, res) => {
-  console.log("Cron job is working (FROM ROUTE)");
+  createStockData();
   res.send("Cron job is working");
 });
+
+// router.get("/api/cron", async (req, res) => {
+//   console.log("Cron job is working (FROM ROUTE)");
+//   res.send("Cron job is working");
+// });
 
 export default router;
