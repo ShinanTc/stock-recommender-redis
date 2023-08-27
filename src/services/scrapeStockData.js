@@ -1,5 +1,4 @@
 import puppeteer from "puppeteer";
-import cron from "node-cron";
 
 import {
   collectStockInformation,
@@ -76,22 +75,3 @@ export async function scrapeStockData() {
     throw error; // Throw any error that occurs during the process
   }
 }
-
-// for scheduling the scrape
-export const scheduleCronJob = () => {
-  return new Promise((resolve) => {
-    console.log("scheduling cron job");
-
-    cron.schedule(
-      "0 10 * * *",
-      () => {
-        console.log("IT'S 10 AM");
-        global.cronJobCompleted = true;
-        resolve(); // Resolve the promise when the cron job is executed.
-      },
-      {
-        timezone: "Asia/Kolkata",
-      }
-    );
-  });
-};
