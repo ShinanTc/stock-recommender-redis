@@ -10,7 +10,15 @@ import {
 export async function scrapeStockData() {
   try {
     // open the browser
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({
+      headless: "new",
+      args: [
+        `--disable-gpu`,
+        `--disable-setuid-sandbox`,
+        `--no-sandbox`,
+        `--no-zygote`,
+      ],
+    });
 
     // getting the first tab
     const page = (await browser.pages())[0];
