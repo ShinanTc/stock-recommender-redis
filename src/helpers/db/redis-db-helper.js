@@ -5,7 +5,6 @@ import {
   getHighestProfitableTrades,
   turnIntoKeyValueFormat,
 } from "../scrape/processScrapedData.js";
-import { createClient } from "@vercel/kv";
 import dotenv from "dotenv";
 
 dotenv.config();
