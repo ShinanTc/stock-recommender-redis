@@ -1,4 +1,4 @@
-import { scrapeStockData } from "../../services/scrapeStockData.js";
+import { scrapeStockData } from "../../services/scrape.js";
 import {
   removeNaNvalues,
   removeNonProfitableTrades,
