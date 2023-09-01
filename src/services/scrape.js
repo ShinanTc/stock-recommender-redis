@@ -9,14 +9,27 @@ import { createStockData } from "../helpers/db/redis-db-helper.js";
 // for scraping the stock data
 export async function scrapeStockData() {
   try {
+    console.log("Inside scrapeStockData function");
+
     // open the browser
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer
+      .launch({
+        headless: "new",
+        args: ["--no-sandbox"],
+      })
+      .catch((error) => console.error(error));
+
+    console.log("after launching the browser");
 
     // getting the first tab
     const page = (await browser.pages())[0];
 
+    console.log("after getting the first tab");
+
     // go to the website
     await page.goto("https://www.indiainfoline.com/stock-ideas/");
+
+    console.log("Entered indiainfoline.com website");
 
     let stockDetails = {
       stocks: [],
@@ -25,6 +38,8 @@ export async function scrapeStockData() {
 
     // Wrap the scraping process in a promise
     const stocksPromise = new Promise(async (resolve, reject) => {
+      console.log("Inside stocksPromise variable");
+
       setTimeout(async () => {
         try {
           // close the popup button

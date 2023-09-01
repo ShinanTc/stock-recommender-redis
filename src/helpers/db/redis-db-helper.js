@@ -6,6 +6,7 @@ import {
   turnIntoKeyValueFormat,
 } from "../scrape/processScrapedData.js";
 import dotenv from "dotenv";
+import { createClient } from "redis";
 
 dotenv.config();
 
@@ -15,13 +16,27 @@ export async function createStockData() {
 
   try {
     // getting the created redis client
-    let redisClient = createClient({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
+    let redisClient = createClient();
+
+    console.log("Client created");
+
+    // connect to redis
+    await redisClient.connect((err) => {
+      if (err) {
+        console.error("Failed to connect to Redis", err);
+        throw err;
+      } else {
+        console.log("Redis connection succesfull!!!");
+        throw err;
+      }
     });
 
+    console.log("Redis db connected");
+
     // delete all stock values
-    await redisClient.flushdb();
+    await redisClient.flushDb();
+
+    console.log("Database cleared");
 
     let stockData = await scrapeStockData();
 
