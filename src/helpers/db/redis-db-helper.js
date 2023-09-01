@@ -12,7 +12,6 @@ dotenv.config();
 
 // create stock data
 export async function createStockData() {
-  console.log("Inside createStockData");
 
   try {
     // getting the created redis client
