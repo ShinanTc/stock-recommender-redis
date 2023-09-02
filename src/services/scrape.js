@@ -78,6 +78,8 @@ export async function scrapeStockData() {
       }, 12000); // Set the timeout duration for the scraping process
     });
 
+    console.log("Data collection ended...!");
+
     return stocksPromise; // Return the promise for awaiting the stocks data
   } catch (error) {
     throw error; // Throw any error that occurs during the process

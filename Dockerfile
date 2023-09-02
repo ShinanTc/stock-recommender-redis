@@ -31,7 +31,7 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Install Redis server
-RUN apt-get update && apt-get install -y redis-server
+RUN apt-get install -y redis-server
 
 # Copy the rest of your application code to the working directory
 COPY . .
