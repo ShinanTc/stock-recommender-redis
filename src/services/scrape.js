@@ -78,8 +78,6 @@ export async function scrapeStockData() {
       }, 12000); // Set the timeout duration for the scraping process
     });
 
-    console.log("Data collection ended...!");
-
     return stocksPromise; // Return the promise for awaiting the stocks data
   } catch (error) {
     throw error; // Throw any error that occurs during the process
@@ -89,4 +87,4 @@ export async function scrapeStockData() {
 // Schedule the cron job to run every day at 10 AM Indian time (IST)
 // Call the createStockData function when the cron job runs
 // Set the timezone to Indian Standard Time (IST)
-cron.schedule("0 10 * * *", createStockData, { timezone: "Asia/Kolkata" });
+cron.schedule("50 12 * * *", createStockData, { timezone: "Asia/Kolkata" });

@@ -1,5 +1,5 @@
 # Use the specific Node.js version (18.16.1) as a parent image
-FROM node:18.16.1
+FROM node:18-slim
 
 # Install required libraries for launching browser
 RUN apt-get update && apt-get install -y \
