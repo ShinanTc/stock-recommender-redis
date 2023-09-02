@@ -87,4 +87,4 @@ export async function scrapeStockData() {
 // Schedule the cron job to run every day at 10 AM Indian time (IST)
 // Call the createStockData function when the cron job runs
 // Set the timezone to Indian Standard Time (IST)
-cron.schedule("50 12 * * *", createStockData, { timezone: "Asia/Kolkata" });
+cron.schedule("0 10 * * *", createStockData, { timezone: "Asia/Kolkata" });
