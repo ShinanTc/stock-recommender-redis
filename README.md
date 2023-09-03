@@ -144,3 +144,29 @@ docker run -p <desired-port>:3000 -d stock-recommender:latest
 The app will be accessible in your web browser at http://localhost:<desired-port> (e.g., http://localhost:8080 if you chose port 8080).
 
 That's it! You've successfully run the Stock Recommendation App using a Docker image.
+
+## Usage
+
+### Entering Your Budget
+
+1. Open the Stock Recommendation App in your web browser.
+
+2. On the app's main page, you will find an input field labeled "Enter your budget."
+
+3. Type in the amount of money you have available for investing in the stock market.
+
+4. You can either press the "Submit" button or simply press the "Enter" key after entering your budget.
+
+### Viewing Affordable Stock Signals
+
+5. After submitting your budget, the app will process the information.
+
+6. You will be automatically redirected to another page where you can view a list of affordable stock signals tailored to your specified budget.
+
+7. Each signal will include relevant details such as the stock symbol, last traded price, target price and potential return on investment (Profit).
+
+8. Explore the list of affordable stock signals to make informed investment decisions based on your budget.
+
+9. You can return to the main page or perform additional searches by simply clicking the provided navigation links or using the app's 'return to home page' button.
+
+This feature allows you to quickly identify stock opportunities that align with your budget constraints, helping you make strategic investment choices.
