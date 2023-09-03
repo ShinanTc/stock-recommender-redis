@@ -138,9 +138,9 @@ Once you have built the Docker image, you can run the Stock Recommendation App i
 docker run -p <desired-port>:3000 -d stock-recommender:latest
 ```
 
-* <desired-port>: Specify the port on your host machine where you want to access the app.
-* <your-image-name>: Provide the image name you used when building the Docker image in the previous step.
-* <your-image-tag-name>: An optional label that you attach to the image to indicate a specific version, build, or variation. Tags are usually in the format :tag-name. If you don't specify a tag, Docker uses the default latest tag.
+* desired-port : Specify the port on your host machine where you want to access the app.
+* your-image-name : Provide the image name you used when building the Docker image in the previous step.
+* your-image-tag-name : An optional label that you attach to the image to indicate a specific version, build, or variation. Tags are usually in the format :tag-name. If you don't specify a tag, Docker uses the default latest tag.
 
 The app will be accessible in your web browser at http://localhost:<desired-port> (e.g., http://localhost:8080 if you chose port 8080).
 
