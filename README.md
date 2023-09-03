@@ -20,11 +20,11 @@ Unlock the Power of Informed Investing with Our Stock Recommendation App!
 
 Before you begin using or contributing to the Stock Recommendation App, ensure that you have the following prerequisites in place:
 
-#### For General Users :
+#### For General Users
 
 Web Browser : Ensure you have a modern web browser like Google Chrome, Mozilla Firefox, or Safari to access the app.
 
-#### For Developers :
+#### For Developers
 
 Node.js : The app is built using Node.js, so you need to have it installed on your system. You can download it from <a href="https://nodejs.org/en">nodejs.org</a>.
 
