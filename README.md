@@ -9,6 +9,8 @@ Unlock the Power of Informed Investing with Our Stock Recommendation App!
     - [For General Users](#for-general-users)
     - [For Developers](#for-developers)
       - [Installation](#installation-for-developers)
+        - [Run with npm](#run-with-npm)
+        - [Run with Docker image](#run-with-docker-image)
 - [Usage](#usage)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
@@ -32,9 +34,11 @@ Before you begin using or contributing to the Stock Recommendation App, ensure t
 
 <strong>Git</strong> : You'll need Git to clone the app's repository. You can download Git from <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">git-scm.com</a>.
 
-<strong>Docker</strong> : If you want to run the app in a Docker container, make sure you have Docker installed. You can download Docker from <a href="https://docs.docker.com/get-docker/">docker.com</a>.
+<strong>Docker (only if you are running with Docker image)</strong> : If you want to run the app in a Docker container, make sure you have Docker installed. You can download Docker from <a href="https://docs.docker.com/get-docker/">docker.com</a>.
 
 ##### Installation
+
+###### Run with npm
 
 <strong>Step 1: Clone the Repository</strong>
 
@@ -64,13 +68,13 @@ npm install
 
 To start the app, run one of the following commands, depending on whether you want to run it in production mode or development mode:
 
-* For production mode:
+- For production mode:
 
 ```
 npm start
 ```
 
-* For development mode:
+- For development mode:
 
 When developing and testing our Stock Recommendation App, it's recommended to use the following command:
 
@@ -101,3 +105,43 @@ PORT=8080
 The app will now run on port 8080 when you start it.
 
 That's it! Your Stock Recommendation App should now be up and running. Users or developers can access it by opening a web browser and navigating to http://localhost:3000 (or the custom port you specified).
+
+###### Run with Docker image
+
+<strong> Building the Docker image </strong>
+
+1. Open your terminal and navigate to the project directory:
+
+```
+cd /path/to/stock-recommender-redis
+```
+
+2. Build the Docker image using the following command (replace <your-image-name> with your desired image name):
+
+```
+docker build -t <your-image-name>:<your-image-tag-name> .
+```
+
+For example:
+
+```
+docker build -t stock-recommender-app:latest .
+```
+
+3. Wait for Docker to download dependencies and build the image. This may take some time depending on your internet connection and system performance.
+
+<strong>Running the Docker Container</strong>
+
+Once you have built the Docker image, you can run the Stock Recommendation App in a Docker container:
+
+```
+docker run -p <desired-port>:3000 -d stock-recommender:latest
+```
+
+* <desired-port>: Specify the port on your host machine where you want to access the app.
+* <your-image-name>: Provide the image name you used when building the Docker image in the previous step.
+* <your-image-tag-name>: An optional label that you attach to the image to indicate a specific version, build, or variation. Tags are usually in the format :tag-name. If you don't specify a tag, Docker uses the default latest tag.
+
+The app will be accessible in your web browser at http://localhost:<desired-port> (e.g., http://localhost:8080 if you chose port 8080).
+
+That's it! You've successfully run the Stock Recommendation App using a Docker image.
