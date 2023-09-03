@@ -22,7 +22,7 @@ Before you begin using or contributing to the Stock Recommendation App, ensure t
 
 #### For General Users
 
-Web Browser : Ensure you have a modern web browser like Google Chrome, Mozilla Firefox, or Safari to access the app.
+<strong>Web Browser</strong> : Ensure you have a modern web browser like Google Chrome, Mozilla Firefox, or Safari to access the app.
 
 #### For Developers
 
