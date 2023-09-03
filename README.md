@@ -72,9 +72,13 @@ npm start
 
 * For development mode:
 
+When developing and testing our Stock Recommendation App, it's recommended to use the following command:
+
 ```
 npm run dev
 ```
+
+Using npm run dev leverages the nodemon package, which monitors your codebase for changes. With nodemon, you don't have to manually restart the server after each code modification; it will automatically restart the server whenever you save your files. This can significantly streamline your development workflow and help you focus on writing code.
 
 <strong>Step 5: Verify App Startup</strong>
 
