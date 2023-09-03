@@ -13,7 +13,6 @@ Unlock the Power of Informed Investing with Our Stock Recommendation App!
         - [Run with Docker image](#run-with-docker-image)
 - [Usage](#usage)
 - [Architecture](#architecture)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Getting Started
