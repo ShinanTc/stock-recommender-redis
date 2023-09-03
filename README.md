@@ -33,3 +33,67 @@ Before you begin using or contributing to the Stock Recommendation App, ensure t
 <strong>Git</strong> : You'll need Git to clone the app's repository. You can download Git from <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">git-scm.com</a>.
 
 <strong>Docker</strong> : If you want to run the app in a Docker container, make sure you have Docker installed. You can download Docker from <a href="https://docs.docker.com/get-docker/">docker.com</a>.
+
+##### Installation
+
+<strong>Step 1: Clone the Repository</strong>
+
+To get started, open your terminal and run the following command to clone your repository:
+
+```
+git clone https://github.com/ShinanTc/stock-recommender-redis.git
+```
+
+<strong>Step 2: Enter the Project Folder</strong>
+
+Navigate into the project folder using the `cd` command:
+
+```
+cd stock-recommender-redis
+```
+
+<strong>Step 3: Install Dependencies</strong>
+
+Use npm to install the required project dependencies:
+
+```
+npm install
+```
+
+<strong>Step 4: Start the App</strong>
+
+To start the app, run one of the following commands, depending on whether you want to run it in production mode or development mode:
+
+* For production mode:
+
+```
+npm start
+```
+
+* For development mode:
+
+```
+npm run dev
+```
+
+<strong>Step 5: Verify App Startup</strong>
+
+After running the appropriate command, check the terminal for a log message similar to this:
+
+```
+Listening on port: 3000
+```
+
+This message indicates that the app has started successfully and is now running on port 3000 by default.
+
+<strong>Step 6: Customize Port (Optional)</strong>
+
+If you want to run the app on a different port, you can create a `.env` file in the project root directory and specify the desired port number. For example, to run the app on port 8080, create a ``.env` file with the following content:
+
+```
+PORT=8080
+```
+
+The app will now run on port 8080 when you start it.
+
+That's it! Your Stock Recommendation App should now be up and running. Users or developers can access it by opening a web browser and navigating to http://localhost:3000 (or the custom port you specified).
