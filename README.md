@@ -26,7 +26,7 @@ Web Browser : Ensure you have a modern web browser like Google Chrome, Mozilla F
 
 #### For Developers
 
-Node.js : The app is built using Node.js, so you need to have it installed on your system. You can download it from <a href="https://nodejs.org/en">nodejs.org</a>.
+<strong>Node.js</strong> : The app is built using Node.js, so you need to have it installed on your system. You can download it from <a href="https://nodejs.org/en">nodejs.org</a>.
 
 Redis : The app uses Redis as the primary database. Make sure you have a Redis server up and running. You can download and install Redis from <a href="https://redis.io/docs/getting-started/installation/">redis.io</a>.
 
