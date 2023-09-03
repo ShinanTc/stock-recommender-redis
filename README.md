@@ -2,7 +2,6 @@
 
 Unlock the Power of Informed Investing with Our Stock Recommendation App!
 
-
 ## Table of Contents
 
 - [Getting Started](#getting-started)
@@ -14,3 +13,9 @@ Unlock the Power of Informed Investing with Our Stock Recommendation App!
 - [Architecture](#architecture)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Getting Started
+
+### For General Users
+
+⚠️ COMING SOON
