@@ -204,3 +204,15 @@ NB: Please note that the inclusion of the Redis Database in this tech stack is s
 - **GitHub**: The app is hosted on GitHub, providing version control and collaboration capabilities. This allows for seamless contribution from developers and easy project management.
 
 The architecture is designed to ensure performance, flexibility, and ease of maintenance, making it well-suited to deliver accurate and timely stock recommendations to users.
+
+## License
+
+This project is licensed under **The Unlicense** - see the [LICENSE](LICENSE) file for details.
+
+### The Unlicense
+
+The Unlicense is a public domain dedication tool that allows you to waive all copyright and related rights in your work. This means that anyone is free to use, modify, distribute, or sublicense your project for any purpose, without any restrictions or conditions.
+
+By choosing The Unlicense, I, the author, have chosen to give up all rights to this work and place it in the public domain. You are free to use this project in any way you see fit, and you are not bound by any copyright or licensing terms.
+
+For more details, please see the [LICENSE](LICENSE) file in the root of this repository.
