@@ -187,6 +187,8 @@ Including Puppeteer in this context helps users and developers understand its ro
 
 - **Redis Database**: Redis serves as the primary database for storing essential data, such as stock signals and user preferences. Its in-memory data store capabilities make it an excellent choice for real-time data retrieval.
 
+NB: Please note that the inclusion of the Redis Database in this tech stack is solely for the purpose of learning and experimentation.
+
 ### Containerization
 
 - **Docker**: The app is containerized using Docker, allowing for easy deployment and management of application components. Docker containers ensure consistency across various environments and simplify scaling.
