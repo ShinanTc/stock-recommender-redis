@@ -170,3 +170,35 @@ That's it! You've successfully run the Stock Recommendation App using a Docker i
 9. You can return to the main page or perform additional searches by simply clicking the provided navigation links or using the app's 'return to home page' button.
 
 This feature allows you to quickly identify stock opportunities that align with your budget constraints, helping you make strategic investment choices.
+
+## Architecture
+
+The Stock Recommendation App is built on a robust and scalable architecture designed to provide reliable stock signals to users. Here's an overview of the key components and technologies used in the app:
+
+### Data Retrieval and Automation
+
+- **Puppeteer**: Puppeteer is utilized for web scraping and automation tasks. It allows the app to fetch real-time data from external sources, enabling the generation of up-to-date stock signals and market insights. Puppeteer's headless browser capabilities streamline the process of accessing dynamic web content and extracting valuable information.
+
+Including Puppeteer in this context helps users and developers understand its role in data retrieval and automation within your app. However, if Puppeteer is used for a relatively minor or less critical task, you may choose to mention it in a more specific section of your README or documentation, as appropriate.
+
+### Backend Stack
+
+- **Node.js with Express Framework**: The app's backend is powered by Node.js, a fast and efficient JavaScript runtime. Express.js is used as the web application framework for routing and handling HTTP requests, making it well-suited for building RESTful APIs.
+
+- **Redis Database**: Redis serves as the primary database for storing essential data, such as stock signals and user preferences. Its in-memory data store capabilities make it an excellent choice for real-time data retrieval.
+
+### Containerization
+
+- **Docker**: The app is containerized using Docker, allowing for easy deployment and management of application components. Docker containers ensure consistency across various environments and simplify scaling.
+
+### Frontend
+
+- **HTML**: The app's frontend is built using plain HTML, providing a straightforward and lightweight user interface.
+
+### Additional Technologies
+
+- **Nodemon**: In the development environment, the app leverages the Nodemon npm package, which automatically restarts the server whenever code changes are detected. This accelerates the development process by eliminating the need for manual server restarts.
+
+- **GitHub**: The app is hosted on GitHub, providing version control and collaboration capabilities. This allows for seamless contribution from developers and easy project management.
+
+The architecture is designed to ensure performance, flexibility, and ease of maintenance, making it well-suited to deliver accurate and timely stock recommendations to users.
