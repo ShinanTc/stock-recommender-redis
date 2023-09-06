@@ -7,7 +7,6 @@ import {
   removeUnaffordableStocks,
 } from "../../helpers/scrape/processScrapedData.js";
 import { getAllStockValues } from "../../helpers/db/redis-db-helper.js";
-import { createStockData } from "../../helpers/db/redis-db-helper.js";
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
